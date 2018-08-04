@@ -16,4 +16,13 @@ public interface UserService {
 	 * @param user
 	 */
 	public void saveUser(Users user);
+	
+	
+	/**
+	 * 通过用户名和md5加密密码查询用户是否存在
+	 * @param username 用户名
+	 * @param password md5加密后的密码
+	 * @return 查询到的用户
+	 */
+	public Users queryUserByUsernameAndMd5Pwd(String username, String password);
 }
