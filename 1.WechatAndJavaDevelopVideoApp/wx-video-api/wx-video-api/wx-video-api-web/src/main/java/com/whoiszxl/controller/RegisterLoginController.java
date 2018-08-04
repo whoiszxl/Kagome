@@ -1,4 +1,4 @@
-package com.whoiszxl;
+package com.whoiszxl.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,31 +11,36 @@ import com.whoiszxl.service.UserService;
 import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MD5Utils;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
+@Api(value = "用户注册登录接口", tags = { "注册和登录的controller" })
 public class RegisterLoginController {
 
 	@Autowired
 	private UserService userService;
-	
+
+	@ApiOperation(value = "用户登录", notes = "用户注册接口")
 	@PostMapping("/register")
 	public JSONResult<String> register(@RequestBody Users user) throws Exception {
-		//1. 校验用户名密码有效性
-		if(StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) {
+		// 1. 校验用户名密码有效性
+		if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) {
 			return JSONResult.errorMsg("用户名密码不能为空");
 		}
-		//2. 校验用户名是否存在
+		// 2. 校验用户名是否存在
 		boolean userNameIsExist = userService.queryUsernameIsExist(user.getUsername());
-		if(userNameIsExist) {
+		if (userNameIsExist) {
 			return JSONResult.errorMsg("用户名已存在");
 		}
-		//3. 保存用户
+		// 3. 保存用户
 		user.setNickname(user.getUsername());
 		user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
 		user.setFansCounts(0);
 		user.setReceiveLikeCounts(0);
 		user.setFollowCounts(0);
-		userService.saveUser(user);		
+		userService.saveUser(user);
 		return JSONResult.ok();
-	} 
-	
+	}
+
 }
