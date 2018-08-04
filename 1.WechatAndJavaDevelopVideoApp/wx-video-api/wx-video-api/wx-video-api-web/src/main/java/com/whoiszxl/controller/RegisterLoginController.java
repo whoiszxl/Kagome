@@ -1,12 +1,16 @@
 package com.whoiszxl.controller;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.whoiszxl.pojo.Users;
+import com.whoiszxl.pojo.vo.UsersVo;
 import com.whoiszxl.service.UserService;
 import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MD5Utils;
@@ -16,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(value = "用户注册登录接口", tags = { "注册和登录的controller" })
-public class RegisterLoginController {
+public class RegisterLoginController extends BasicController{
 
 	@Autowired
 	private UserService userService;
@@ -42,7 +46,18 @@ public class RegisterLoginController {
 		userService.saveUser(user);
 
 		user.setPassword("");
-		return JSONResult.ok(user);
+		
+		return JSONResult.ok(setUserRedisSessionToken(user));
+	}
+	
+	public UsersVo setUserRedisSessionToken(Users userModel) {
+		String uniqueToken = UUID.randomUUID().toString();
+		redis.set(USER_REDIS_SESSION + ":" + userModel.getId(), uniqueToken, 1000*60*30);
+		
+		UsersVo userVo = new UsersVo();
+		BeanUtils.copyProperties(userModel, userVo);
+		userVo.setUserToken(uniqueToken);
+		return userVo;
 	}
 
 	@ApiOperation(value = "用户登录", notes = "用户登录接口")
@@ -55,7 +70,8 @@ public class RegisterLoginController {
 		// 2. 通过用户名和密码查询用户是否存在
 		Users result = userService.queryUserByUsernameAndMd5Pwd(user.getUsername(), MD5Utils.getMD5Str(user.getPassword()));
 		if(result != null) {
-			return JSONResult.ok(result);
+			UsersVo userVo = setUserRedisSessionToken(result);
+			return JSONResult.ok(userVo);
 		}else {
 			return JSONResult.errorMsg("用户名或密码不正确");
 		}
