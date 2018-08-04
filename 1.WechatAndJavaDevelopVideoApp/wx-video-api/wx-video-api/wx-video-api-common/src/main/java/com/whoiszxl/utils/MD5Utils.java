@@ -14,13 +14,4 @@ public class MD5Utils {
 		String newstr = Base64.encodeBase64String(md5.digest(strValue.getBytes()));
 		return newstr;
 	}
-
-	public static void main(String[] args) {
-		try {
-			String md5 = getMD5Str("imooc");
-			System.out.println(md5);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }
