@@ -3,7 +3,7 @@
         <image class="login-img" src="../resource/images/moon.jpg"></image>
     </view>
     <view class="login-from">
-        <form bindsubmit='doRegist'>
+        <form bindsubmit='doRegister'>
             <!--账号-->
             <view class="inputView">
                 <image class="nameImage" src="../resource/images/username.png"></image>

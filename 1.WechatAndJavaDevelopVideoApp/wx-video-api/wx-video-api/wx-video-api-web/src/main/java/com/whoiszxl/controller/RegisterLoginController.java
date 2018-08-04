@@ -23,7 +23,7 @@ public class RegisterLoginController {
 
 	@ApiOperation(value = "用户登录", notes = "用户注册接口")
 	@PostMapping("/register")
-	public JSONResult<String> register(@RequestBody Users user) throws Exception {
+	public JSONResult<?> register(@RequestBody Users user) throws Exception {
 		// 1. 校验用户名密码有效性
 		if (StringUtils.isBlank(user.getUsername()) || StringUtils.isBlank(user.getPassword())) {
 			return JSONResult.errorMsg("用户名密码不能为空");
@@ -40,7 +40,9 @@ public class RegisterLoginController {
 		user.setReceiveLikeCounts(0);
 		user.setFollowCounts(0);
 		userService.saveUser(user);
-		return JSONResult.ok();
+		
+		user.setPassword("");
+		return JSONResult.ok(user);
 	}
 
 }
