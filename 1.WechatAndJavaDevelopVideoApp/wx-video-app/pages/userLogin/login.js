@@ -55,8 +55,12 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            app.userInfo = res.data.data;
+            //app.userInfo = res.data.data;
+            app.setGlobalUserInfo(res.data.data);
             //TODO 页面跳转
+            wx.redirectTo({
+              url: '../mine/mine',
+            })
           } else if (res.data.status == 500) {
             // 失败弹出框
             wx.showToast({

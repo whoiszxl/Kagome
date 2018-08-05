@@ -16,6 +16,7 @@ import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MD5Utils;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -52,7 +53,7 @@ public class RegisterLoginController extends BasicController{
 	
 	public UsersVo setUserRedisSessionToken(Users userModel) {
 		String uniqueToken = UUID.randomUUID().toString();
-		redis.set(USER_REDIS_SESSION + ":" + userModel.getId(), uniqueToken, 1000*60*30);
+		redis.set(USER_REDIS_SESSION + ":" + userModel.getId(), uniqueToken, 60*30);
 		
 		UsersVo userVo = new UsersVo();
 		BeanUtils.copyProperties(userModel, userVo);
@@ -75,5 +76,15 @@ public class RegisterLoginController extends BasicController{
 		}else {
 			return JSONResult.errorMsg("用户名或密码不正确");
 		}
+	}
+	
+	
+	@ApiOperation(value = "用户注销", notes = "用户注销接口")
+	@ApiImplicitParam(name = "userId", value = "用户id", required = true,
+	dataType = "String", paramType = "query")
+	@PostMapping("/logout")
+	public JSONResult<String> logout(String userId) throws Exception {
+		redis.del(USER_REDIS_SESSION + ":" + userId);
+		return JSONResult.ok("注销成功");
 	}
 }
