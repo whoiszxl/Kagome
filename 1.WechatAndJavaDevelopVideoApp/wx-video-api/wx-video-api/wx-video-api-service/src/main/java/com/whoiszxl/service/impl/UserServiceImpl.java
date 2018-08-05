@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.whoiszxl.config.SecretConfig;
 import com.whoiszxl.mapper.UsersMapper;
 import com.whoiszxl.pojo.Users;
 import com.whoiszxl.service.UserService;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private Sid sid;
+	
+	@Autowired
+	private SecretConfig secretConfig;
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
@@ -63,6 +67,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Users queryUserInfo(String userId) {
 		Users user = usersMapper.selectByPrimaryKey(userId);
+		if(user.getFaceImage() != null) {
+			user.setFaceImage(secretConfig.getQiniuHttpBase() + user.getFaceImage());
+		}
 		return user;
 	}
 

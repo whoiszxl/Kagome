@@ -31,7 +31,6 @@ Page({
   },
 
   onLoad: function (params) {
-    
     var me = this;
     var user = app.getGlobalUserInfo();
     var userId = user.id;
@@ -39,6 +38,36 @@ Page({
 
     me.setData({
       userId: userId
+    });
+
+
+    var serverUrl = app.serverUrl;
+    wx.request({
+      url: serverUrl + '/user/info?userId='+userId,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function(res) {
+        console.log(res.data);
+        wx.hideLoading();
+        
+        if(res.data.status == 200) {
+          var userInfo = res.data.data;
+          var faceUrl = "../resource/images/noneface.png";
+          if (userInfo.faceImage != null && userInfo.faceImage != '' && userInfo.faceImage != undefined) {
+            faceUrl = userInfo.faceImage;
+          }
+          me.setData({
+            faceUrl: faceUrl,
+            fansCounts: userInfo.fansCounts,
+            followCounts: userInfo.followCounts,
+            receiveLikeCounts: userInfo.receiveLikeCounts,
+            nickname: userInfo.nickname,
+            isFollow: userInfo.follow
+          });
+        }
+      }
     })
   },
 
