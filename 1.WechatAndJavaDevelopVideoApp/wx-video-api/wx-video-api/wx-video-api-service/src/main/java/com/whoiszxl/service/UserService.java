@@ -32,4 +32,12 @@ public interface UserService {
 	 * @param user 用户实体
 	 */
 	public boolean updateUserInfo(Users user);
+	
+	
+	/**
+	 * 通过用户id查询到用户的个人信息
+	 * @param userId 用户id
+	 * @return 查询到的用户个人信息
+	 */
+	public Users queryUserInfo(String userId);
 }
