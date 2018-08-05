@@ -36,3 +36,7 @@ mvnw
 mvnw.cmd
 .settings
 target
+
+
+# my config
+secret.properties
