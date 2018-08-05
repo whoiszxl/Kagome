@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.whoiszxl.pojo.Users;
 import com.whoiszxl.service.UserService;
 import com.whoiszxl.utils.FileUploadUtils;
 import com.whoiszxl.utils.JSONResult;
@@ -36,15 +37,27 @@ public class UserController {
 	@ApiOperation(value = "用户上传头像", notes = "用户上传接口")
 	@PostMapping("/uploadFace")
 	public JSONResult uploadFace(String userId,@RequestParam("file") MultipartFile[] files) {
+		
+		if(StringUtils.isBlank(userId)) {
+			return JSONResult.errorMsg("用户ID不正确");
+		}
+		
 		String uploadPath = "/face/" + userId + "/";
 		if(files != null && files.length > 0) {
 			
 			String fileName = files[0].getOriginalFilename();
 			if(StringUtils.isNotBlank(fileName)) {				
 				//开始上传操作
-				String FacePathOfDB = fileUploadUtils.uploadToQiniu(files[0], uploadPath);
-				
+				String facePathOfDB = fileUploadUtils.uploadToQiniu(files[0], uploadPath);
+				if(StringUtils.isNotBlank(facePathOfDB)) {
+					Users user = new Users();
+					user.setId(userId);
+					user.setFaceImage(facePathOfDB);
+					userService.updateUserInfo(user);
+				}
 			}
+		}else {
+			return JSONResult.errorMsg("上传头像出错");
 		}
 		return JSONResult.ok("上传成功");
 	}

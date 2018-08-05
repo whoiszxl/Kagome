@@ -25,4 +25,11 @@ public interface UserService {
 	 * @return 查询到的用户
 	 */
 	public Users queryUserByUsernameAndMd5Pwd(String username, String password);
+	
+	
+	/**
+	 * 更新用户信息
+	 * @param user 用户实体
+	 */
+	public boolean updateUserInfo(Users user);
 }

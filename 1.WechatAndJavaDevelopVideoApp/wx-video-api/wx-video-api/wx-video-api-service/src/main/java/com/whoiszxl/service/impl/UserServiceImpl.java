@@ -50,4 +50,14 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	@Override
+	public boolean updateUserInfo(Users user) {
+//		Example userExample = new Example(Users.class);
+//		Criteria criteria = userExample.createCriteria();
+//		criteria.andEqualTo("id", user.getId());
+		
+		int result = usersMapper.updateByPrimaryKeySelective(user);
+		return result > 0;
+	}
+
 }

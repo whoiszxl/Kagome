@@ -100,10 +100,16 @@ Page({
             var data = res.data;
             console.log(data);
             wx.hideLoading();
-            wx.showToast({
-              title: "上传成功",
-              icon: "success"
-            })
+            if(res.data.status == 200) {
+              wx.showToast({
+                title: "上传成功",
+                icon: "success"
+              });
+            }else if(res.data.status == 500){
+              wx.showToast({
+                title: res.data.msg
+              })
+            }
           }
         })
       }

@@ -41,7 +41,7 @@ public class FileUploadUtils {
 			logger.error("七牛云上傳文件異常", e);
 			e.printStackTrace();
 		}
-		return path+qiniuFileName;
+		return qiniuFileName;
 	}
 
 	public String uploadToQiniu(File file, String path) {
@@ -58,7 +58,7 @@ public class FileUploadUtils {
 			logger.error("七牛云上傳文件異常", e);
 			e.printStackTrace();
 		}
-		return path+qiniuFileName;
+		return qiniuFileName;
 	}
 
 }
