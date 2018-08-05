@@ -63,13 +63,13 @@ public class UniqueFileUploader {
      * @return 云存储HTTP地址
      * @throws Exception
      */
-    public String upload(File file, String format, boolean keepName) throws Exception {
+    public String upload(File file, String format, String path, boolean keepName) throws Exception {
     	String target = null;
     	if(keepName) {
     		target = file.getName();
     	}else {
     		String uuid = UUID.randomUUID().toString();
-            target = uuid + "." + format;
+            target = path + uuid + "." + format;
     	}
     	
         cloudStorageService.upload(file, target);

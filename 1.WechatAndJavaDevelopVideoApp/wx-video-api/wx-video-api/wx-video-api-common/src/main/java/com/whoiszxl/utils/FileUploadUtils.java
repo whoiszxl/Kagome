@@ -5,6 +5,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.whoiszxl.oss.UniqueFileUploader;
@@ -14,9 +15,10 @@ import com.whoiszxl.oss.UniqueFileUploader;
  * @author whoiszxl
  *
  */
+@Component
 public class FileUploadUtils {
 
-	private Logger logger = LoggerFactory.getLogger(FileUploadUtils.class);
+	private final static Logger logger = LoggerFactory.getLogger(FileUploadUtils.class);
 	
 	@Autowired
 	private UniqueFileUploader uniqueFileUploader;
@@ -33,13 +35,13 @@ public class FileUploadUtils {
 			targetFile = File.createTempFile("tmp", null);
 			file.transferTo(targetFile);
 			// 開始執行上傳到七牛云操作
-			qiniuFileName = uniqueFileUploader.upload(targetFile, fileExtsionName, false);
+			qiniuFileName = uniqueFileUploader.upload(targetFile, fileExtsionName, path, false);
 			targetFile.delete();
 		} catch (Exception e) {
 			logger.error("七牛云上傳文件異常", e);
 			e.printStackTrace();
 		}
-		return qiniuFileName;
+		return path+qiniuFileName;
 	}
 
 	public String uploadToQiniu(File file, String path) {
@@ -51,12 +53,12 @@ public class FileUploadUtils {
 		String qiniuFileName = null;
 		try {
 			// 開始執行上傳到七牛云操作
-			qiniuFileName = uniqueFileUploader.upload(file, fileExtsionName, true);
+			qiniuFileName = uniqueFileUploader.upload(file, fileExtsionName, path, true);
 		} catch (Exception e) {
 			logger.error("七牛云上傳文件異常", e);
 			e.printStackTrace();
 		}
-		return qiniuFileName;
+		return path+qiniuFileName;
 	}
 
 }
