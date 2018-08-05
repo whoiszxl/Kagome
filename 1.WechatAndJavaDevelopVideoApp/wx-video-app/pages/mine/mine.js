@@ -150,5 +150,38 @@ Page({
         })
       }
     })
+  },
+
+  uploadVideo: function() {
+    var me = this;
+
+    wx.chooseVideo({
+      sourceType: ['album'],
+      success: function(res) {
+        console.log(res);
+
+        var duration = res.duration;
+        var tmpHeight = res.height;
+        var tmpWidth = res.width;
+        var tmpVideoUrl = res.tempFilePath;
+        var tmpCoverUrl = res.thumbTempFilePath;
+
+        if(duration > 11) {
+          wx.showToast({
+            title: '视频长度不能超过10秒',
+            icon: 'none',
+            duration: 2500
+          })
+        }else if(duration < 1) {
+          wx.showToast({
+            title: '视频长度不能小于1秒',
+            icon: 'none',
+            duration: 2500
+          })
+        }else {
+          //TODO 打开选择bgm的页面
+        }
+      }
+    })
   }
 })
