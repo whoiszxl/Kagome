@@ -179,7 +179,15 @@ Page({
             duration: 2500
           })
         }else {
-          //TODO 打开选择bgm的页面
+          // 打开选择bgm的页面
+          wx.navigateTo({
+            url: '../chooseBgm/chooseBgm?duration=' + duration
+            + "&tmpHeight=" + tmpHeight
+            + "&tmpWidth=" + tmpWidth
+            + "&tmpVideoUrl=" + tmpVideoUrl
+            + "&tmpCoverUrl=" + tmpCoverUrl
+            ,
+          })
         }
       }
     })
