@@ -76,6 +76,7 @@ Page({
   },
 
   changeFace: function() {
+    var me = this;
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
@@ -97,17 +98,23 @@ Page({
             'content-type': 'application/json'
           },
           success: function (res) {
-            var data = res.data;
+            var data = JSON.parse(res.data);
             console.log(data);
             wx.hideLoading();
-            if(res.data.status == 200) {
+            if(data.status == 200) {
               wx.showToast({
                 title: "上传成功",
                 icon: "success"
               });
-            }else if(res.data.status == 500){
+
+              var faceImageUrl = data.data;
+              me.setData({
+                faceUrl: faceImageUrl
+              });
+
+            }else if(data.status == 500){
               wx.showToast({
-                title: res.data.msg
+                title: data.msg
               })
             }
           }
