@@ -32,6 +32,14 @@ Page({
 
   onLoad: function (params) {
     
+    var me = this;
+    var user = app.getGlobalUserInfo();
+    var userId = user.id;
+    console.log("onLoad:" + userId);
+
+    me.setData({
+      userId: userId
+    })
   },
 
 
@@ -62,6 +70,41 @@ Page({
         wx.removeStorageSync("userInfo");
         wx.redirectTo({
           url: '../userLogin/login',
+        })
+      }
+    })
+  },
+
+  changeFace: function() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album'],
+      success: function(res) {
+        var tempFilePaths = res.tempFilePaths;
+        console.log(tempFilePaths);
+
+        wx.showLoading({
+          title: '上传中...',
+        })
+        var serverUrl = app.serverUrl;
+        var userInfo = app.getGlobalUserInfo();
+        wx.uploadFile({
+          url: serverUrl + '/user/uploadFace?userId=' + userInfo.id,
+          filePath: tempFilePaths[0],
+          name: 'file',
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            var data = res.data;
+            console.log(data);
+            wx.hideLoading();
+            wx.showToast({
+              title: "上传成功",
+              icon: "success"
+            })
+          }
         })
       }
     })
