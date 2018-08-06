@@ -31,4 +31,10 @@ public class BgmServiceImpl implements BgmService {
 		return resultList;
 	}
 
+	@Override
+	public Bgm queryBgmById(String bgmId) {
+		Bgm bgm = bgmMapper.selectByPrimaryKey(bgmId);
+		return bgm;
+	}
+
 }

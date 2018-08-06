@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.whoiszxl.config.SecretConfig;
+import com.whoiszxl.config.ResourceConfig;
 import com.whoiszxl.pojo.Users;
 import com.whoiszxl.pojo.vo.UsersVo;
 import com.whoiszxl.service.UserService;
@@ -36,7 +36,7 @@ public class UserController {
 	private FileUploadUtils fileUploadUtils;
 	
 	@Autowired
-	private SecretConfig secretConfig;
+	private ResourceConfig resourceConfig;
 	
 	
 	
@@ -60,7 +60,7 @@ public class UserController {
 					user.setId(userId);
 					user.setFaceImage(facePathOfDB);
 					userService.updateUserInfo(user);
-					return JSONResult.ok(secretConfig.getQiniuHttpBase() + facePathOfDB);
+					return JSONResult.ok(resourceConfig.getQiniuHttpBase() + facePathOfDB);
 				}
 			}
 		}

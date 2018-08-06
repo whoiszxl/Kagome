@@ -12,6 +12,7 @@ import com.whoiszxl.oss.UniqueFileUploader;
 
 /**
  * 文件上传工具
+ * 
  * @author whoiszxl
  *
  */
@@ -19,10 +20,10 @@ import com.whoiszxl.oss.UniqueFileUploader;
 public class FileUploadUtils {
 
 	private final static Logger logger = LoggerFactory.getLogger(FileUploadUtils.class);
-	
+
 	@Autowired
 	private UniqueFileUploader uniqueFileUploader;
-	
+
 	public String uploadToQiniu(MultipartFile file, String path) {
 
 		String fileName = file.getOriginalFilename();// 获取原始文件名
@@ -59,6 +60,25 @@ public class FileUploadUtils {
 			e.printStackTrace();
 		}
 		return qiniuFileName;
+	}
+
+	/**
+	 * 判断文件夹是否存在
+	 * @param path 文件夹绝对地址
+	 */
+	public static void dirIsExists(String path) {
+		File file = new File(path);
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				System.out.println("dir exists");
+			} else {
+				System.out.println("the same name file exists, can not create dir");
+			}
+		} else {
+			System.out.println("dir not exists, create it ...");
+			file.mkdirs();
+		}
+
 	}
 
 }

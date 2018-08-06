@@ -12,6 +12,26 @@ public class ResourceConfig {
 	private String zookeeperServer;
 	
 	private String qiniuHttpBase;
+	
+	private String ffmpegExe;
+	
+	private String tmpFilePath;
+
+	public String getTmpFilePath() {
+		return tmpFilePath;
+	}
+
+	public void setTmpFilePath(String tmpFilePath) {
+		this.tmpFilePath = tmpFilePath;
+	}
+
+	public String getFfmpegExe() {
+		return ffmpegExe;
+	}
+
+	public void setFfmpegExe(String ffmpegExe) {
+		this.ffmpegExe = ffmpegExe;
+	}
 
 	public String getZookeeperServer() {
 		return zookeeperServer;
