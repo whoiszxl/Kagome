@@ -54,7 +54,7 @@ public class FileUploadUtils {
 		String qiniuFileName = null;
 		try {
 			// 開始執行上傳到七牛云操作
-			qiniuFileName = uniqueFileUploader.upload(file, fileExtsionName, path, true);
+			qiniuFileName = uniqueFileUploader.upload(file, fileExtsionName, path, false);
 		} catch (Exception e) {
 			logger.error("七牛云上傳文件異常", e);
 			e.printStackTrace();

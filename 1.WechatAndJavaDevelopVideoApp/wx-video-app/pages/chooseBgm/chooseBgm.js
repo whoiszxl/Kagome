@@ -101,38 +101,43 @@ Page({
             wx.showLoading({
               title: '上传中...',
             })
-            
-            wx.uploadFile({
-              url: serverUrl + '/video/uploadCover',
-              formData: {
-                userId: userInfo.id,
-                videoId: videoId
-              },
-              filePath: tmpCoverUrl,
-              name: 'file',
-              header: {
-                'content-type': 'application/json' // 默认值
-              },
-              success: function (res) {
-                var data = JSON.parse(res.data);
-                wx.hideLoading();
-                if (data.status == 200) {
-                  wx.showToast({
-                    title: '上传成功!~~',
-                    icon: "success"
-                  });
-                  wx.navigateBack({
-                    delta: 1,
-                  })
-                } else {
-                  wx.showToast({
-                    title: '上传失败!~~',
-                    icon: "success"
-                  });
-                }
 
-              }
+            // 上传成功后跳回之前的页面
+            wx.navigateBack({
+              delta: 1
             })
+            
+            // wx.uploadFile({
+            //   url: serverUrl + '/video/uploadCover',
+            //   formData: {
+            //     userId: userInfo.id,
+            //     videoId: videoId
+            //   },
+            //   filePath: tmpCoverUrl,
+            //   name: 'file',
+            //   header: {
+            //     'content-type': 'application/json' // 默认值
+            //   },
+            //   success: function (res) {
+            //     var data = JSON.parse(res.data);
+            //     wx.hideLoading();
+            //     if (data.status == 200) {
+            //       wx.showToast({
+            //         title: '上传成功!~~',
+            //         icon: "success"
+            //       });
+            //       wx.navigateBack({
+            //         delta: 1,
+            //       })
+            //     } else {
+            //       wx.showToast({
+            //         title: '上传失败!~~',
+            //         icon: "success"
+            //       });
+            //     }
+
+            //   }
+            // })
 
 
           } else if (res.data.status == 502) {

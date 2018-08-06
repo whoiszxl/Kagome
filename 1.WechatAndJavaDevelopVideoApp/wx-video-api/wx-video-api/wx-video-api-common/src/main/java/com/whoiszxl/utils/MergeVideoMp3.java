@@ -39,9 +39,12 @@ private String ffmpegEXE;
 		command.add("-y");
 		command.add(videoOutputPath);
 		
-//		for (String c : command) {
-//			System.out.print(c + " ");
-//		}
+		
+		System.out.print("合并视频的命令：");
+		for (String c : command) {
+			System.out.print(c + " ");
+		}
+		System.out.println();
 		
 		ProcessBuilder builder = new ProcessBuilder(command);
 		Process process = builder.start();

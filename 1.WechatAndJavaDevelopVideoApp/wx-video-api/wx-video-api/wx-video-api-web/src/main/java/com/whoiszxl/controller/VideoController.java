@@ -18,6 +18,7 @@ import com.whoiszxl.pojo.Users;
 import com.whoiszxl.pojo.Videos;
 import com.whoiszxl.service.BgmService;
 import com.whoiszxl.service.VideoService;
+import com.whoiszxl.utils.FetchVideoCover;
 import com.whoiszxl.utils.FileUploadUtils;
 import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MergeVideoMp3;
@@ -101,9 +102,30 @@ public class VideoController {
 						
 						//对视频音频进行合并
 						tool.convertor(videoInputPath, mp3InputPath, videoSeconds, outputPathFile);
-						
 						//将合并后的视频上传到oss
 						String finalVideoPathOfDB = fileUploadUtils.uploadToQiniu(outFile, uploadPath);
+						
+						
+						//生成一发cover封面
+						//1. 先获取到视频文件的前缀，也就是不带后缀的文件名
+						String outFileName = outFile.getName();
+						String arrayFilenameItem[] =  outFileName.split("\\.");
+						String fileNamePrefix = "";
+						for (int i = 0 ; i < arrayFilenameItem.length-1 ; i ++) {
+							fileNamePrefix += arrayFilenameItem[i];
+						}
+						
+						//拼接出需要入库的封面路径
+						String coverFilePathDB = uploadPath + fileNamePrefix + ".jpg";
+						//拼接出本地保存的封面图路径
+						String outputPathCoverFile = resourceConfig.getTmpFilePath() + coverFilePathDB;
+						System.out.println("输出的封面路径："+outputPathCoverFile);
+						//然后进行截图一发
+						FetchVideoCover coverTool = new FetchVideoCover(resourceConfig.getFfmpegExe());
+						coverTool.getCover(videoInputPath, outputPathCoverFile);
+						//拿到文件后直接给存到oss上面去
+						File coverFile = new File(resourceConfig.getTmpFilePath() + coverFilePathDB);
+						String finalCoverPathDB = fileUploadUtils.uploadToQiniu(coverFile, uploadPath);
 						
 						//然后保存视频信息到数据库
 						Videos video = new Videos();
@@ -114,6 +136,7 @@ public class VideoController {
 						video.setVideoWidth(videoWidth);
 						video.setVideoDesc(desc);
 						video.setVideoPath(finalVideoPathOfDB);
+						video.setCoverPath(finalCoverPathDB);
 						video.setStatus(VideoStatusEnum.SUCCESS.value);
 						video.setCreateTime(new Date());
 						
