@@ -157,6 +157,7 @@ Page({
 
     wx.chooseVideo({
       sourceType: ['album'],
+      compressed: false,
       success: function(res) {
         console.log(res);
 
