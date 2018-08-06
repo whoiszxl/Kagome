@@ -117,8 +117,8 @@ public class VideoController {
 						video.setStatus(VideoStatusEnum.SUCCESS.value);
 						video.setCreateTime(new Date());
 						
-						videoService.saveVideo(video);
-						return JSONResult.ok();
+						String videoId = videoService.saveVideo(video);
+						return JSONResult.ok(videoId);
 					}
 					
 					
@@ -126,5 +126,43 @@ public class VideoController {
 			}
 		}
 		return JSONResult.errorMsg("上传短视频出错");
+	}
+	
+	
+	
+	
+	
+	
+	
+	@ApiOperation(value = "用户上传视频封面接口", notes = "用户上传视频封面接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="userId", value="用户id", required=true, 
+				dataType="String", paramType="form"),
+		@ApiImplicitParam(name="videoId", value="视频id", required=true, 
+				dataType="String", paramType="form")
+	})
+	@PostMapping(value = "/uploadCover", headers = "content-type=multipart/form-data")
+	public JSONResult uploadCover(
+			String userId,
+			String videoId,
+			@ApiParam(value = "短视频文件封面", required = true)MultipartFile file) throws Exception {
+		
+		if(StringUtils.isBlank(userId) || StringUtils.isBlank(videoId)) {
+			return JSONResult.errorMsg("短视频or用户ID不正确");
+		}
+		String uploadPath = "cover/" + userId + "/";
+		if(file != null) {
+			String fileName = file.getOriginalFilename();
+			if(StringUtils.isNotBlank(fileName)) {				
+				//开始上传操作
+				String coverPathOfDB = fileUploadUtils.uploadToQiniu(file, uploadPath);
+				if(StringUtils.isNotBlank(coverPathOfDB)) {
+					//更新cover到数据库
+					videoService.updateVideoCover(videoId, coverPathOfDB);
+					return JSONResult.ok();
+				}
+			}
+		}
+		return JSONResult.errorMsg("上传短视频封面出错");
 	}
 }
