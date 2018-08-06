@@ -1,6 +1,7 @@
 package com.whoiszxl.controller;
 
 import java.io.File;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.whoiszxl.config.ResourceConfig;
+import com.whoiszxl.enums.VideoStatusEnum;
 import com.whoiszxl.pojo.Bgm;
 import com.whoiszxl.pojo.Users;
+import com.whoiszxl.pojo.Videos;
 import com.whoiszxl.service.BgmService;
+import com.whoiszxl.service.VideoService;
 import com.whoiszxl.utils.FileUploadUtils;
 import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MergeVideoMp3;
@@ -37,6 +41,9 @@ public class VideoController {
 	
 	@Autowired
 	private ResourceConfig resourceConfig;
+	
+	@Autowired
+	private VideoService videoService;
 	
 	
 	@ApiOperation(value = "用户上传视频接口", notes = "用户上传视频接口")
@@ -62,7 +69,7 @@ public class VideoController {
 			int videoWidth,
 			int videoHeight,
 			String desc,
-			@ApiParam(value = "短视频文件", required = true)MultipartFile file) {
+			@ApiParam(value = "短视频文件", required = true)MultipartFile file) throws Exception {
 		
 		if(StringUtils.isBlank(userId)) {
 			return JSONResult.errorMsg("用户ID不正确");
@@ -92,14 +99,29 @@ public class VideoController {
 							outFile.getParentFile().mkdirs();
 						}
 						
-						try {
-							tool.convertor(videoInputPath, mp3InputPath, videoSeconds, outputPathFile);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						//对视频音频进行合并
+						tool.convertor(videoInputPath, mp3InputPath, videoSeconds, outputPathFile);
+						
+						//将合并后的视频上传到oss
+						String finalVideoPathOfDB = fileUploadUtils.uploadToQiniu(outFile, uploadPath);
+						
+						//然后保存视频信息到数据库
+						Videos video = new Videos();
+						video.setAudioId(bgmId);
+						video.setUserId(userId);
+						video.setVideoSeconds((float) videoSeconds);
+						video.setVideoHeight(videoHeight);
+						video.setVideoWidth(videoWidth);
+						video.setVideoDesc(desc);
+						video.setVideoPath(finalVideoPathOfDB);
+						video.setStatus(VideoStatusEnum.SUCCESS.value);
+						video.setCreateTime(new Date());
+						
+						videoService.saveVideo(video);
+						return JSONResult.ok();
 					}
 					
-					return JSONResult.ok();
+					
 				}
 			}
 		}
