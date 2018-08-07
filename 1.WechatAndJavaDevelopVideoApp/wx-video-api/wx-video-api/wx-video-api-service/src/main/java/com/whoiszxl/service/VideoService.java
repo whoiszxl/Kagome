@@ -1,5 +1,7 @@
 package com.whoiszxl.service;
 
+import java.util.List;
+
 import com.whoiszxl.pojo.Videos;
 import com.whoiszxl.utils.PagedResult;
 
@@ -24,9 +26,18 @@ public interface VideoService {
 	
 	/**
 	 * 查询所有视频 带分页
+	 * @param video 
 	 * @param page 页码
 	 * @param pageSize 每页显示数量
+	 * @param integer 
 	 * @return
 	 */
-	public PagedResult getAllVideos(Integer page, Integer pageSize);
+	public PagedResult getAllVideos(Videos video, Integer isSaveRecord, Integer page, Integer pageSize);
+
+	
+	/**
+	 * 获取热搜词
+	 * @return
+	 */
+	public List<String> getHotWords();
 }

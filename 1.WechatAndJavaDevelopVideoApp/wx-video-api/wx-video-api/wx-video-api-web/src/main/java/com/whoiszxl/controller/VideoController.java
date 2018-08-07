@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -163,16 +164,20 @@ public class VideoController extends BasicController {
 	@ApiOperation(value = "获取视频列表接口", notes = "获取视频列表接口")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Integer", paramType = "form"),
-			@ApiImplicitParam(name = "pageSize", value = "每页显示数量", required = false, dataType = "Integer", paramType = "form") })
+			@ApiImplicitParam(name = "isSaveRecord", value = "是否保存记录,1:保存 0：不保存", required = false, dataType = "Integer", paramType = "form") })
 	@PostMapping(value = "/showAll")
-	public JSONResult showAll(Integer page, Integer pageSize) throws Exception {
+	public JSONResult showAll(@RequestBody Videos video, Integer isSaveRecord, Integer page) throws Exception {
 		if(page == null) {
 			page = 1;
 		}
-		if(pageSize == null) {
-			pageSize = resourceConfig.getVideoPageSize();
-		}
-		PagedResult pagedResult = videoService.getAllVideos(page, pageSize);
+		PagedResult pagedResult = videoService.getAllVideos(video, isSaveRecord, page, resourceConfig.getVideoPageSize());
 		return JSONResult.ok(pagedResult);
+	}
+	
+	
+	@ApiOperation(value = "获取热搜词列表接口", notes = "获取热搜词列表接口")
+	@PostMapping(value = "/hot")
+	public JSONResult hot() throws Exception {
+		return JSONResult.ok(videoService.getHotWords());
 	}
 }

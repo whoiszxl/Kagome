@@ -13,8 +13,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.whoiszxl.config.ResourceConfig;
 import com.whoiszxl.mapper.BgmMapper;
+import com.whoiszxl.mapper.SearchRecordsMapper;
 import com.whoiszxl.mapper.VideosMapper;
 import com.whoiszxl.mapper.VideosMapperCustom;
+import com.whoiszxl.pojo.SearchRecords;
 import com.whoiszxl.pojo.Videos;
 import com.whoiszxl.pojo.vo.VideosVO;
 import com.whoiszxl.service.VideoService;
@@ -31,6 +33,9 @@ public class VideoServiceImpl implements VideoService {
 	
 	@Autowired
 	private ResourceConfig resourceConfig;
+	
+	@Autowired
+	private SearchRecordsMapper searchRecordsMapper;
 	
 	@Autowired
 	private Sid sid;
@@ -54,10 +59,21 @@ public class VideoServiceImpl implements VideoService {
 		int result = videosMapper.updateByPrimaryKeySelective(videos);
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
-	public PagedResult getAllVideos(Integer page, Integer pageSize) {
+	public PagedResult getAllVideos(Videos video, Integer isSaveRecord, Integer page, Integer pageSize) {
+		
+		//保存热搜词
+		String desc = video.getVideoDesc();
+		if(isSaveRecord != null && isSaveRecord == 1) {
+			SearchRecords record = new SearchRecords();
+			record.setId(sid.nextShort());
+			record.setContent(desc);
+			searchRecordsMapper.insert(record);
+		}
+		
 		PageHelper.startPage(page, pageSize);
-		List<VideosVO> list = videosMapperCustom.queryAllVideos();
+		List<VideosVO> list = videosMapperCustom.queryAllVideos(desc);
 		PageInfo<VideosVO> pageList = new PageInfo<>(list);
 		
 		List<VideosVO> newlist = new ArrayList<>();
@@ -72,6 +88,12 @@ public class VideoServiceImpl implements VideoService {
 		pagedResult.setRows(newlist);
 		pagedResult.setRecords(pageList.getTotal());
 		return pagedResult;
+	}
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	@Override
+	public List<String> getHotWords() {
+		return searchRecordsMapper.getHotWords();
 	}
 
 	
