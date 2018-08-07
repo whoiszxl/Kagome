@@ -31,6 +31,7 @@ Page({
 
     var height = videoInfo.videoHeight;
     var width = videoInfo.videoWidth;
+    console.log();
     var cover = "cover";
     if (width >= height) {
       cover = "";
@@ -38,7 +39,7 @@ Page({
 
     me.setData({
       videoId: videoInfo.id,
-      src: app.serverUrl + videoInfo.videoPath,
+      src: videoInfo.prefixHost + videoInfo.videoPath,
       videoInfo: videoInfo,
       cover: cover
     });
