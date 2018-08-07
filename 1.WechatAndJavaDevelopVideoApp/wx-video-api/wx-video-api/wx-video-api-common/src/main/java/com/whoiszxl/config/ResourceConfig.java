@@ -16,6 +16,16 @@ public class ResourceConfig {
 	private String ffmpegExe;
 	
 	private String tmpFilePath;
+	
+	private Integer videoPageSize;
+
+	public Integer getVideoPageSize() {
+		return videoPageSize;
+	}
+
+	public void setVideoPageSize(Integer videoPageSize) {
+		this.videoPageSize = videoPageSize;
+	}
 
 	public String getTmpFilePath() {
 		return tmpFilePath;

@@ -4,7 +4,8 @@
     "pages/userLogin/login",
     "pages/mine/mine",
     "pages/userRegist/regist",
-    "pages/chooseBgm/chooseBgm"
+    "pages/chooseBgm/chooseBgm",
+    "pages/videoinfo/videoinfo"
     
   ],
   "window":{

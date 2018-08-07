@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "背景音乐业务接口", tags = "背景音乐相关业务Controller")
 @RestController
 @RequestMapping("/bgm")
-public class BgmController {
+public class BgmController extends BasicController{
 
 	@Autowired
 	private BgmService bgmService;

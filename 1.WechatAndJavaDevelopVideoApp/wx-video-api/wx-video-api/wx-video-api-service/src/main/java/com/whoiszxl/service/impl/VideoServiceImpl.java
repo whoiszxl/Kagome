@@ -1,22 +1,36 @@
 package com.whoiszxl.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.whoiszxl.config.ResourceConfig;
 import com.whoiszxl.mapper.BgmMapper;
 import com.whoiszxl.mapper.VideosMapper;
+import com.whoiszxl.mapper.VideosMapperCustom;
 import com.whoiszxl.pojo.Videos;
+import com.whoiszxl.pojo.vo.VideosVO;
 import com.whoiszxl.service.VideoService;
+import com.whoiszxl.utils.PagedResult;
 
 @Service
 public class VideoServiceImpl implements VideoService {
 
 	@Autowired
 	private VideosMapper videosMapper;
+	
+	@Autowired
+	private VideosMapperCustom videosMapperCustom;
+	
+	@Autowired
+	private ResourceConfig resourceConfig;
 	
 	@Autowired
 	private Sid sid;
@@ -39,5 +53,26 @@ public class VideoServiceImpl implements VideoService {
 		videos.setCoverPath(coverPath);
 		int result = videosMapper.updateByPrimaryKeySelective(videos);
 	}
+
+	@Override
+	public PagedResult getAllVideos(Integer page, Integer pageSize) {
+		PageHelper.startPage(page, pageSize);
+		List<VideosVO> list = videosMapperCustom.queryAllVideos();
+		PageInfo<VideosVO> pageList = new PageInfo<>(list);
+		
+		List<VideosVO> newlist = new ArrayList<>();
+		for (VideosVO videosVO : list) {
+			videosVO.setPrefixHost(resourceConfig.getQiniuHttpBase());
+			newlist.add(videosVO);
+		}
+		
+		PagedResult pagedResult = new PagedResult();
+		pagedResult.setPage(page);
+		pagedResult.setTotal(pageList.getPages());
+		pagedResult.setRows(newlist);
+		pagedResult.setRecords(pageList.getTotal());
+		return pagedResult;
+	}
+
 	
 }

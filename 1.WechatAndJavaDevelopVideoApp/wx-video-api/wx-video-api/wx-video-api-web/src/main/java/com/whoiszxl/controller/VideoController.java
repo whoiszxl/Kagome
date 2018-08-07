@@ -2,6 +2,7 @@ package com.whoiszxl.controller;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.whoiszxl.utils.FetchVideoCover;
 import com.whoiszxl.utils.FileUploadUtils;
 import com.whoiszxl.utils.JSONResult;
 import com.whoiszxl.utils.MergeVideoMp3;
+import com.whoiszxl.utils.PagedResult;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +34,7 @@ import io.swagger.annotations.ApiParam;
 @Api(value = "短视频业务接口", tags = "短视频相关业务Controller")
 @RestController
 @RequestMapping("/video")
-public class VideoController {
+public class VideoController extends BasicController {
 
 	@Autowired
 	private FileUploadUtils fileUploadUtils;
@@ -155,5 +157,22 @@ public class VideoController {
 			}
 		}
 		return JSONResult.errorMsg("上传短视频封面出错");
+	}
+	
+	
+	@ApiOperation(value = "获取视频列表接口", notes = "获取视频列表接口")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Integer", paramType = "form"),
+			@ApiImplicitParam(name = "pageSize", value = "每页显示数量", required = false, dataType = "Integer", paramType = "form") })
+	@PostMapping(value = "/showAll")
+	public JSONResult showAll(Integer page, Integer pageSize) throws Exception {
+		if(page == null) {
+			page = 1;
+		}
+		if(pageSize == null) {
+			pageSize = resourceConfig.getVideoPageSize();
+		}
+		PagedResult pagedResult = videoService.getAllVideos(page, pageSize);
+		return JSONResult.ok(pagedResult);
 	}
 }

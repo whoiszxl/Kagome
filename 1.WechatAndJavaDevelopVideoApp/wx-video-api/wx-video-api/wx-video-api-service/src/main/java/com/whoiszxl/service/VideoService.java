@@ -1,6 +1,7 @@
 package com.whoiszxl.service;
 
 import com.whoiszxl.pojo.Videos;
+import com.whoiszxl.utils.PagedResult;
 
 public interface VideoService {
 
@@ -18,4 +19,14 @@ public interface VideoService {
 	 * @return
 	 */
 	public void updateVideoCover(String videoId, String coverPath);
+	
+	
+	
+	/**
+	 * 查询所有视频 带分页
+	 * @param page 页码
+	 * @param pageSize 每页显示数量
+	 * @return
+	 */
+	public PagedResult getAllVideos(Integer page, Integer pageSize);
 }

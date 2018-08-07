@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "用户相关业务接口", tags = "用户相关业务Controller")
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BasicController {
 
 	@Autowired
 	private UserService userService;

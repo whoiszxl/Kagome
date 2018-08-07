@@ -19,6 +19,16 @@ public class VideosVO {
 
     private String faceImage;
     private String nickname;
+    
+    private String prefixHost;
+
+	public String getPrefixHost() {
+		return prefixHost;
+	}
+
+	public void setPrefixHost(String prefixHost) {
+		this.prefixHost = prefixHost;
+	}
 
 	public String getFaceImage() {
 		return faceImage;
@@ -252,4 +262,11 @@ public class VideosVO {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	return audioId;
+    }
+    
 }
