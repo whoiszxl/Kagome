@@ -277,5 +277,9 @@
 		<module>xlmall-pojo</module>
 		<module>xlmall-dao</module>
 		<module>xlmall-common</module>
+		<module>xlmall-sellergoods-interface</module>
+		<module>xlmall-sellergoods-service</module>
+		<module>xlmall-manager-web</module>
+		<module>xlmall-shop-web</module>
 	</modules>
 </project>
