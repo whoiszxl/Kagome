@@ -27,7 +27,8 @@
 			//重新调用查询品牌的接口
 			$scope.reloadList=function(){
 				 //切换页码  
-				$scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+				//$scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
+				$scope.search( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
 			}
 			
 			//分页控件配置 
@@ -107,6 +108,18 @@
 					}		
 				);
 			}
+			
+			//条件查询
+			$scope.searchEntity = {};//定义搜索对象
+			$scope.search=function(page, size) {
+				$http.post('../brand/search.do?page='+page+'&size='+size, $scope.searchEntity).success(
+					function(response) {
+						$scope.paginationConf.totalItems=response.total;//总记录数
+						$scope.list=response.rows;//给列表变量赋值
+					}
+				);
+			}
+			
 		});
 		
 		
@@ -136,7 +149,9 @@
                             </div>
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-							                                         
+							    	品牌名称：<input ng-model="searchEntity.name"> 
+							    	品牌首字母：<input ng-model="searchEntity.firstChar"> 
+							    	<button class="btn btn-default" ng-click="reloadList()">查询</button>                             
                                 </div>
                             </div>
                             <!--工具栏/-->
@@ -167,8 +182,7 @@
 			                      </tbody>
 			                  </table>
 			                  <!--数据列表/-->                        
-							  <tm-pagination conf="paginationConf"></tm-pagination>
-					 
+							  <tm-pagination conf="paginationConf"></tm-pagination>					 
                         </div>
                         <!-- 数据表格 /-->
                         

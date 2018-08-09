@@ -50,15 +50,20 @@ public class BrandController {
 	public TbBrand findOne(Long id) {
 		return brandService.findOne(id);
 	}
-	
+
 	@PostMapping("/delete")
 	public Result delete(Long[] ids) {
 		try {
 			brandService.delete(ids);
-			return new Result(true, "删除成功"); 
+			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false, "删除失败");
 		}
+	}
+
+	@PostMapping("/search")
+	public PageResult search(@RequestBody TbBrand brand, int page, int size) {
+		return brandService.findAll(brand, page, size);
 	}
 }

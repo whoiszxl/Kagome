@@ -54,4 +54,12 @@ public interface BrandService {
 	 * @param ids
 	 */
 	public void delete(Long[] ids);
+	
+	/**
+	 * 分页条件查询品牌列表
+	 * @param pageNum 页码
+	 * @param pageSize 页面数量
+	 * @return
+	 */
+	public PageResult findAll(TbBrand tbBrand, int pageNum, int pageSize);
 }
