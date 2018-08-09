@@ -24,14 +24,7 @@
 		var app = angular.module('xlmall', ['pagination']);
 		app.controller('brandController', function($scope, $http) {
 			
-			$scope.findAll = function() {
-				$http.get('../brand/findAll.do').success(
-					function(response) {
-						$scope.list = response;
-					}
-				);
-			}
-			
+			//重新调用查询品牌的接口
 			$scope.reloadList=function(){
 				 //切换页码  
 				$scope.findPage( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
@@ -55,6 +48,20 @@
 							$scope.list=response.rows;	
 							$scope.paginationConf.totalItems=response.total;//更新总记录数
 						}			
+				);
+			}
+			
+			
+			$scope.add=function(){
+				$http.post('../brand/add.do', $scope.entity).success(
+					function(response){
+						if(response.success){
+							//重新查询 
+							 $scope.reloadList();//重新加载
+						}else{
+							 alert(response.message);
+						}
+					}	
 				);
 			}
 			
@@ -140,17 +147,17 @@
 		<div class="modal-body">		
 			<table class="table table-bordered table-striped"  width="800px">
 		      	<tr>
-		      		<td>品牌名称</td>
-		      		<td><input  class="form-control" placeholder="品牌名称" >  </td>
+		      		<td>品牌名称a</td>
+		      		<td><input  class="form-control" placeholder="品牌名称" ng-model="entity.name" >  </td>
 		      	</tr>		      	
 		      	<tr>
 		      		<td>首字母</td>
-		      		<td><input  class="form-control" placeholder="首字母">  </td>
+		      		<td><input  class="form-control" placeholder="首字母" ng-model="entity.firstChar" >  </td>
 		      	</tr>		      	
 			 </table>				
 		</div>
 		<div class="modal-footer">						
-			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="add()">保存</button>
 			<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
 		</div>
 	  </div>

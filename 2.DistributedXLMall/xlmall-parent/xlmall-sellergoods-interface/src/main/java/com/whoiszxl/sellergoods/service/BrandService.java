@@ -25,4 +25,11 @@ public interface BrandService {
 	 * @return
 	 */
 	public PageResult findAll(int pageNum, int pageSize);
+	
+	
+	/**
+	 * 增加一个品牌
+	 * @param brand
+	 */
+	public void add(TbBrand brand);
 }
