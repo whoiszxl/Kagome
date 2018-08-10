@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.whoiszxl.pojo.TbSpecification;
+import com.whoiszxl.pojogroup.Specification;
 import com.whoiszxl.sellergoods.service.SpecificationService;
 
 import com.whoiszxl.entity.PageResult;
@@ -47,7 +48,7 @@ public class SpecificationController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbSpecification specification){
+	public Result add(@RequestBody Specification specification){
 		try {
 			specificationService.add(specification);
 			return new Result(true, "增加成功");

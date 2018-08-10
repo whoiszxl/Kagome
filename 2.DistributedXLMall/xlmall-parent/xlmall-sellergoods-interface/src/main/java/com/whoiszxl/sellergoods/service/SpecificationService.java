@@ -1,7 +1,7 @@
 package com.whoiszxl.sellergoods.service;
 import java.util.List;
 import com.whoiszxl.pojo.TbSpecification;
-
+import com.whoiszxl.pojogroup.Specification;
 import com.whoiszxl.entity.PageResult;
 /**
  * 服务层接口
@@ -27,7 +27,7 @@ public interface SpecificationService {
 	/**
 	 * 增加
 	*/
-	public void add(TbSpecification specification);
+	public void add(Specification specification);
 	
 	
 	/**

@@ -5,9 +5,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.whoiszxl.mapper.TbSpecificationMapper;
+import com.whoiszxl.mapper.TbSpecificationOptionMapper;
 import com.whoiszxl.pojo.TbSpecification;
 import com.whoiszxl.pojo.TbSpecificationExample;
 import com.whoiszxl.pojo.TbSpecificationExample.Criteria;
+import com.whoiszxl.pojo.TbSpecificationOption;
+import com.whoiszxl.pojogroup.Specification;
 import com.whoiszxl.sellergoods.service.SpecificationService;
 
 import com.whoiszxl.entity.PageResult;
@@ -22,6 +25,9 @@ public class SpecificationServiceImpl implements SpecificationService {
 
 	@Autowired
 	private TbSpecificationMapper specificationMapper;
+	
+	@Autowired
+	private TbSpecificationOptionMapper specificationOptionMapper;
 	
 	/**
 	 * 查询全部
@@ -45,8 +51,16 @@ public class SpecificationServiceImpl implements SpecificationService {
 	 * 增加
 	 */
 	@Override
-	public void add(TbSpecification specification) {
-		specificationMapper.insert(specification);		
+	public void add(Specification specification) {
+		//插入规格名称排序的信息
+		specificationMapper.insert(specification.getSpecification());
+		
+		//插入规则选项的信息
+		for (TbSpecificationOption option : specification.getSpecificationOptionList()) {
+			option.setSpecId(specification.getSpecification().getId());
+			specificationOptionMapper.insert(option);
+		}
+		
 	}
 
 	
