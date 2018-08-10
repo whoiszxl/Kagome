@@ -26,6 +26,6 @@
 	<!-- 引用dubbo 服务 -->
 	<dubbo:application name="xlmall-manager-web" />
 	<dubbo:registry address="zookeeper://118.126.92.128:2181"/>
-	<dubbo:annotation package="com.whoiszxl.shop.controller" />  	
+	<dubbo:annotation package="com.whoiszxl.manager.controller" />  	
 
 </beans>
