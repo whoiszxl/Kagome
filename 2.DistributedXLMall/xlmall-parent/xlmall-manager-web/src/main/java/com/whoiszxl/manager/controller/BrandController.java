@@ -1,5 +1,8 @@
 package com.whoiszxl.manager.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,5 +68,10 @@ public class BrandController {
 	@PostMapping("/search")
 	public PageResult search(@RequestBody TbBrand brand, int page, int size) {
 		return brandService.findAll(brand, page, size);
+	}
+	
+	@GetMapping("/selectOptionList")
+	public List<Map> selectOptionList(){
+		return brandService.selectOptionList();
 	}
 }

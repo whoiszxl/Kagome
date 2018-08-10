@@ -1,6 +1,7 @@
 package com.whoiszxl.sellergoods.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.whoiszxl.entity.PageResult;
 import com.whoiszxl.pojo.TbBrand;
@@ -62,4 +63,10 @@ public interface BrandService {
 	 * @return
 	 */
 	public PageResult findAll(TbBrand tbBrand, int pageNum, int pageSize);
+	
+	/**
+	 * 品牌下拉框数据
+	 * @return
+	 */
+	List<Map> selectOptionList();
 }
