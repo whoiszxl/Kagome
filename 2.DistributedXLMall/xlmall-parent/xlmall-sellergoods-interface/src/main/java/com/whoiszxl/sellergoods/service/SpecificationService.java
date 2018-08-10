@@ -1,5 +1,7 @@
 package com.whoiszxl.sellergoods.service;
 import java.util.List;
+import java.util.Map;
+
 import com.whoiszxl.pojo.TbSpecification;
 import com.whoiszxl.pojogroup.Specification;
 import com.whoiszxl.entity.PageResult;
@@ -57,5 +59,11 @@ public interface SpecificationService {
 	 * @return
 	 */
 	public PageResult findPage(TbSpecification specification, int pageNum,int pageSize);
+	
+	/**
+	 * 规格下拉框数据
+	 * @return
+	 */
+	List<Map> selectOptionList();
 	
 }
