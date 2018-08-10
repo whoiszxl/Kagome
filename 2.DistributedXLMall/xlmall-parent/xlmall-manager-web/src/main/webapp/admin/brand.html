@@ -22,7 +22,37 @@
 	
 	<script type="text/javascript">
 		var app = angular.module('xlmall', ['pagination']);
-		app.controller('brandController', function($scope, $http) {
+		
+		//品牌服务
+		app.service("brandService", function($http) {
+			
+			this.findPage = function(page,size) {
+				return $http.get('../brand/findAll.do?page='+page+'&size='+size);
+			}
+			
+			this.findOne = function(id) {
+				return $http.get('../brand/findOne.do?id='+id);
+			}
+			
+			this.add = function(entity) {
+				return $http.get('../brand/add.do', entity);
+			}
+			
+			this.update = function(entity) {
+				return $http.get('../brand/update.do', entity);
+			}
+			
+			this.dele = function(ids) {
+				return $http.post('../brand/delete.do?ids='+ids);
+			}
+			
+			this.search = function(page, size, searchEntity) {
+				return $http.post('../brand/search.do?page='+page+'&size='+size, searchEntity);
+			}
+		});
+		
+		
+		app.controller('brandController', function($scope, brandService) {
 			
 			//重新调用查询品牌的接口
 			$scope.reloadList=function(){
@@ -44,7 +74,7 @@
 			
 			
 			$scope.findPage=function(page,size){	
-				$http.get('../brand/findAll.do?page='+page+'&size='+size).success(
+				brandService.findPage().success(
 						function(response){
 							$scope.list=response.rows;	
 							$scope.paginationConf.totalItems=response.total;//更新总记录数
@@ -55,14 +85,14 @@
 			//添加或修改品牌
 			$scope.save=function(){
 				
-				var methodName = 'add'; //方法名称
+				var object = null; //方法名称
 				if($scope.entity.id!=null){//如果有ID
-					methodName='update';//则执行修改方法 
+					object = brandService.update($scope.entity);
+				}else{
+					object = brandService.add($scope.entity);
 				}
 				
-				
-				
-				$http.post('../brand/'+ methodName +'.do', $scope.entity).success(
+				object.success(
 					function(response){
 						if(response.success){
 							//重新查询 
@@ -76,7 +106,7 @@
 			
 			//查询一个品牌哦
 			$scope.findOne=function(id){
-				$http.get('../brand/findOne.do?id='+id).success(
+				brandService.findOne(id).success(
 						function(response){
 							$scope.entity= response;					
 					     }
@@ -100,7 +130,7 @@
 			//批量删除
 			$scope.dele=function(){
 				//获取到选中的复选框
-				$http.post('../brand/delete.do?ids='+$scope.selectIds).success(
+				brandService.dele($scope.selectIds).success(
 					function(response){
 						if(response.success) {
 							$scope.reloadList();//重载列表
@@ -112,7 +142,7 @@
 			//条件查询
 			$scope.searchEntity = {};//定义搜索对象
 			$scope.search=function(page, size) {
-				$http.post('../brand/search.do?page='+page+'&size='+size, $scope.searchEntity).success(
+				brandService.search(page, size, $scope.searchEntity).success(
 					function(response) {
 						$scope.paginationConf.totalItems=response.total;//总记录数
 						$scope.list=response.rows;//给列表变量赋值
