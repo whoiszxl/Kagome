@@ -85,6 +85,29 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 				$scope.list=response;
 			}			
 		);
-	}  
+	}
+	
+	//面包屑导航实现
+	$scope.grade = 1;//默认为1级	
+	
+	//设置导航等级
+	$scope.setGrade = function(value) {
+		$scope.grade = value;
+	}
     
+	//读取列表
+	$scope.selectList=function(p_entity){			
+		if($scope.grade==1){//如果为1级
+			$scope.entity_1=null;	
+			$scope.entity_2=null;
+		}		
+		if($scope.grade==2){//如果为2级
+			$scope.entity_1=p_entity;	
+			$scope.entity_2=null;
+		}		
+		if($scope.grade==3){//如果为3级
+			$scope.entity_2=p_entity;		
+		}		
+		$scope.findByParentId(p_entity.id);	//查询此级下级列表
+	}
 });	
