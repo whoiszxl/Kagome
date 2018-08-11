@@ -38,10 +38,14 @@
 		<logout/>
 	</http>
 	
+	<!-- bcrypt加密方式bean -->
+	<beans:bean id="bcryptEncoder"  
+        class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	
 	<!-- 认证管理器 -->
 	<authentication-manager>
 		<authentication-provider user-service-ref="userDetailService">
-			
+			<password-encoder ref="bcryptEncoder"></password-encoder>
 		</authentication-provider>	
 	</authentication-manager>
 	
