@@ -26,30 +26,20 @@
 <script charset="utf-8" src="../plugins/kindeditor/lang/zh_CN.js"></script>
 
 
-<script type="text/javascript" src="../plugins/angularjs/angular.min.js">
-	
-</script>
-<script type="text/javascript" src="../js/base.js">
-	
-</script>
-<script type="text/javascript" src="../js/service/uploadService.js">
-	
-</script>
-<script type="text/javascript" src="../js/service/goodsService.js">
-	
-</script>
-<script type="text/javascript" src="../js/controller/baseController.js">
-	
-</script>
-<script type="text/javascript" src="../js/controller/goodsController.js">
-	
-</script>
-
+<script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+<script type="text/javascript" src="../js/base.js"></script>
+<script type="text/javascript" src="../js/service/uploadService.js"></script>
+<script type="text/javascript" src="../js/service/itemCatService.js"></script>
+<script type="text/javascript" src="../js/service/goodsService.js"></script>
+<script type="text/javascript" src="../js/controller/baseController.js"></script>
+<script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="xlmall"
-	ng-controller="goodsController">
+	ng-controller="goodsController"
+	ng-init="selectItemCat1List()"
+	>
 
 	<!-- 正文区域 -->
 	<section class="content">
@@ -80,11 +70,21 @@
 							<div class="col-md-10 data">
 								<table>
 									<tr>
-										<td><select class="form-control">
-										</select></td>
-										<td><select class="form-control select-sm"></select></td>
-										<td><select class="form-control select-sm"></select></td>
-										<td>模板ID:19</td>
+										<td>
+										<select 
+										class="form-control" 
+										ng-model="entity.goods.category1Id" 
+										ng-options="item.id as item.name for item in itemCat1List"
+										>
+										</select>
+										</td>
+										<td>
+										<select class="form-control select-sm" ng-model="entity.goods.category2Id" ng-options="item.id as item.name for item in itemCat2List"></select>
+										</td>
+										<td>
+										<select class="form-control select-sm" ng-model="entity.goods.category3Id" ng-options="item.id as item.name for item in itemCat3List"></select>
+										</td>
+										<td>模板ID:{{entity.goods.typeTemplateId}}</td>
 									</tr>
 								</table>
 
