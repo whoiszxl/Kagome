@@ -1,5 +1,7 @@
 package com.whoiszxl.sellergoods.service;
 import java.util.List;
+import java.util.Map;
+
 import com.whoiszxl.pojo.TbTypeTemplate;
 
 import com.whoiszxl.entity.PageResult;
@@ -58,4 +60,9 @@ public interface TypeTemplateService {
 	 */
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum,int pageSize);
 	
+	/**
+	 * 返回规格列表
+	 * @return
+	 */
+	public List<Map> findSpecList(Long id);
 }
