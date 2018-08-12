@@ -17,6 +17,7 @@ import com.whoiszxl.mapper.TbItemMapper;
 import com.whoiszxl.mapper.TbSellerMapper;
 import com.whoiszxl.pojo.TbBrand;
 import com.whoiszxl.pojo.TbGoods;
+import com.whoiszxl.pojo.TbGoodsDesc;
 import com.whoiszxl.pojo.TbGoodsExample;
 import com.whoiszxl.pojo.TbGoodsExample.Criteria;
 import com.whoiszxl.pojo.TbItem;
@@ -122,8 +123,13 @@ public class GoodsServiceImpl implements GoodsService {
 	 * @return
 	 */
 	@Override
-	public TbGoods findOne(Long id) {
-		return goodsMapper.selectByPrimaryKey(id);
+	public Goods findOne(Long id) {
+		Goods goods=new Goods();
+		TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
+		goods.setGoods(tbGoods);
+		TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
+		goods.setGoodsDesc(tbGoodsDesc);
+		return goods;
 	}
 
 	/**

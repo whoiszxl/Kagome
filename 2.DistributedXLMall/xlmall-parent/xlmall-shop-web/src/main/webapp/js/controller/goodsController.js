@@ -1,6 +1,6 @@
 //控制层 
-app.controller('goodsController', function($scope, $controller, goodsService,
-		uploadService, itemCatService, typeTemplateService) {
+app.controller('goodsController', function($scope, $controller, $location,
+		goodsService, uploadService, itemCatService, typeTemplateService) {
 
 	$controller('baseController', {
 		$scope : $scope
@@ -23,6 +23,10 @@ app.controller('goodsController', function($scope, $controller, goodsService,
 
 	// 查询实体
 	$scope.findOne = function(id) {
+		var id = $location.search()['id'];// 获取参数值
+		if (id == null) {
+			return;
+		}
 		goodsService.findOne(id).success(function(response) {
 			$scope.entity = response;
 		});

@@ -41,7 +41,7 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="xlmall"
-	ng-controller="goodsController" ng-init="selectItemCat1List()">
+	ng-controller="goodsController" ng-init="selectItemCat1List();findOne()">
 
 	<!-- 正文区域 -->
 	<section class="content">
@@ -200,7 +200,8 @@
 						<div class="row data-type">
 							<div class="col-md-2 title">是否启用规格</div>
 							<div class="col-md-10 data">
-								<input type="checkbox"  ng-model="entity.goods.isEnableSpec" ng-true-value="1" ng-false-value="0">
+								<input type="checkbox" ng-model="entity.goods.isEnableSpec"
+									ng-true-value="1" ng-false-value="0">
 							</div>
 						</div>
 						<p>
