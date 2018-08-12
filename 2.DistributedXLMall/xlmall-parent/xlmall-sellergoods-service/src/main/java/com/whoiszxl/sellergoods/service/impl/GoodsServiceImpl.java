@@ -22,6 +22,7 @@ import com.whoiszxl.pojo.TbGoodsExample;
 import com.whoiszxl.pojo.TbGoodsExample.Criteria;
 import com.whoiszxl.pojo.TbItem;
 import com.whoiszxl.pojo.TbItemCat;
+import com.whoiszxl.pojo.TbItemExample;
 import com.whoiszxl.pojo.TbSeller;
 import com.whoiszxl.pojogroup.Goods;
 import com.whoiszxl.sellergoods.service.GoodsService;
@@ -78,33 +79,11 @@ public class GoodsServiceImpl implements GoodsService {
 	 */
 	@Override
 	public void add(Goods goods) {
-		goods.getGoods().setAuditStatus("0");		
-		goodsMapper.insert(goods.getGoods());	//插入商品表
+		goods.getGoods().setAuditStatus("0");
+		goodsMapper.insert(goods.getGoods()); // 插入商品表
 		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
-		goodsDescMapper.insert(goods.getGoodsDesc());//插入商品扩展数据
-		if("1".equals(goods.getGoods().getIsEnableSpec())){
-			for(TbItem item :goods.getItemList()){
-				//标题
-				String title= goods.getGoods().getGoodsName();
-				Map<String,Object> specMap = JSON.parseObject(item.getSpec());
-				for(String key:specMap.keySet()){
-					title+=" "+ specMap.get(key);
-				}
-				item.setTitle(title);
-				setItemValus(goods,item);
-				itemMapper.insert(item);
-			}		
-		}else{					
-			TbItem item=new TbItem();
-			item.setTitle(goods.getGoods().getGoodsName());//商品KPU+规格描述串作为SKU名称
-			item.setPrice( goods.getGoods().getPrice() );//价格			
-			item.setStatus("1");//状态
-			item.setIsDefault("1");//是否默认			
-			item.setNum(99999);//库存数量
-			item.setSpec("{}");			
-			setItemValus(goods,item);					
-			itemMapper.insert(item);
-		}	
+		goodsDescMapper.insert(goods.getGoodsDesc());// 插入商品扩展数据
+		saveItemList(goods);// 插入商品SKU列表数据
 
 	}
 
@@ -112,8 +91,17 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 修改
 	 */
 	@Override
-	public void update(TbGoods goods) {
-		goodsMapper.updateByPrimaryKey(goods);
+	public void update(Goods goods) {
+		goods.getGoods().setAuditStatus("0");// 设置未申请状态:如果是经过修改的商品，需要重新设置状态
+		goodsMapper.updateByPrimaryKey(goods.getGoods());// 保存商品表
+		goodsDescMapper.updateByPrimaryKey(goods.getGoodsDesc());// 保存商品扩展表
+		// 删除原有的sku列表数据
+		TbItemExample example = new TbItemExample();
+		com.whoiszxl.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(goods.getGoods().getId());
+		itemMapper.deleteByExample(example);
+		// 添加新的sku列表数据
+		saveItemList(goods);// 插入商品SKU列表数据
 	}
 
 	/**
@@ -124,11 +112,19 @@ public class GoodsServiceImpl implements GoodsService {
 	 */
 	@Override
 	public Goods findOne(Long id) {
-		Goods goods=new Goods();
+
+		Goods goods = new Goods();
 		TbGoods tbGoods = goodsMapper.selectByPrimaryKey(id);
 		goods.setGoods(tbGoods);
 		TbGoodsDesc tbGoodsDesc = goodsDescMapper.selectByPrimaryKey(id);
 		goods.setGoodsDesc(tbGoodsDesc);
+
+		// 查询SKU商品列表
+		TbItemExample example = new TbItemExample();
+		com.whoiszxl.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		criteria.andGoodsIdEqualTo(id);// 查询条件：商品ID
+		List<TbItem> itemList = itemMapper.selectByExample(example);
+		goods.setItemList(itemList);
 		return goods;
 	}
 
@@ -151,7 +147,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 		if (goods != null) {
 			if (goods.getSellerId() != null && goods.getSellerId().length() > 0) {
-				//criteria.andSellerIdLike("%" + goods.getSellerId() + "%");
+				// criteria.andSellerIdLike("%" + goods.getSellerId() + "%");
 				criteria.andSellerIdEqualTo(goods.getSellerId());
 			}
 			if (goods.getGoodsName() != null && goods.getGoodsName().length() > 0) {
@@ -182,29 +178,89 @@ public class GoodsServiceImpl implements GoodsService {
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
-	
-	private void setItemValus(Goods goods,TbItem item) {
-		item.setGoodsId(goods.getGoods().getId());//商品SPU编号
-		item.setSellerId(goods.getGoods().getSellerId());//商家编号
-		item.setCategoryid(goods.getGoods().getCategory3Id());//商品分类编号（3级）
-		item.setCreateTime(new Date());//创建日期
-		item.setUpdateTime(new Date());//修改日期 
-		
-		//品牌名称
+	private void setItemValus(Goods goods, TbItem item) {
+		item.setGoodsId(goods.getGoods().getId());// 商品SPU编号
+		item.setSellerId(goods.getGoods().getSellerId());// 商家编号
+		item.setCategoryid(goods.getGoods().getCategory3Id());// 商品分类编号（3级）
+		item.setCreateTime(new Date());// 创建日期
+		item.setUpdateTime(new Date());// 修改日期
+
+		// 品牌名称
 		TbBrand brand = brandMapper.selectByPrimaryKey(goods.getGoods().getBrandId());
 		item.setBrand(brand.getName());
-		//分类名称
+		// 分类名称
 		TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(goods.getGoods().getCategory3Id());
 		item.setCategory(itemCat.getName());
-		
-		//商家名称
+
+		// 商家名称
 		TbSeller seller = sellerMapper.selectByPrimaryKey(goods.getGoods().getSellerId());
 		item.setSeller(seller.getNickName());
-		
-		//图片地址（取spu的第一个图片）
-		List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(), Map.class) ;
-		if(imageList.size()>0){
-			item.setImage ( (String)imageList.get(0).get("url"));
-		}		
+
+		// 图片地址（取spu的第一个图片）
+		List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(), Map.class);
+		if (imageList.size() > 0) {
+			item.setImage((String) imageList.get(0).get("url"));
+		}
+	}
+
+	private void setItemValues(TbItem item, Goods goods) {
+		// 商品分类
+		item.setCategoryid(goods.getGoods().getCategory3Id());// 三级分类ID
+		item.setCreateTime(new Date());// 创建日期
+		item.setUpdateTime(new Date());// 更新日期
+
+		item.setGoodsId(goods.getGoods().getId());// 商品ID
+		item.setSellerId(goods.getGoods().getSellerId());// 商家ID
+
+		// 分类名称
+		TbItemCat itemCat = itemCatMapper.selectByPrimaryKey(goods.getGoods().getCategory3Id());
+		item.setCategory(itemCat.getName());
+		// 品牌名称
+		TbBrand brand = brandMapper.selectByPrimaryKey(goods.getGoods().getBrandId());
+		item.setBrand(brand.getName());
+		// 商家名称(店铺名称)
+		TbSeller seller = sellerMapper.selectByPrimaryKey(goods.getGoods().getSellerId());
+		item.setSeller(seller.getNickName());
+
+		// 图片
+		List<Map> imageList = JSON.parseArray(goods.getGoodsDesc().getItemImages(), Map.class);
+		if (imageList.size() > 0) {
+			item.setImage((String) imageList.get(0).get("url"));
+		}
+
+	}
+
+	// 插入sku列表数据
+	private void saveItemList(Goods goods) {
+
+		if ("1".equals(goods.getGoods().getIsEnableSpec())) {
+			for (TbItem item : goods.getItemList()) {
+				// 构建标题 SPU名称+ 规格选项值
+				String title = goods.getGoods().getGoodsName();// SPU名称
+				Map<String, Object> map = JSON.parseObject(item.getSpec());
+				for (String key : map.keySet()) {
+					title += " " + map.get(key);
+				}
+				item.setTitle(title);
+
+				setItemValues(item, goods);
+
+				itemMapper.insert(item);
+			}
+		} else {// 没有启用规格
+
+			TbItem item = new TbItem();
+			item.setTitle(goods.getGoods().getGoodsName());// 标题
+			item.setPrice(goods.getGoods().getPrice());// 价格
+			item.setNum(99999);// 库存数量
+			item.setStatus("1");// 状态
+			item.setIsDefault("1");// 默认
+			item.setSpec("{}");// 规格
+
+			setItemValues(item, goods);
+
+			itemMapper.insert(item);
+		}
+
 	}
 }
