@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.whoiszxl.mapper.TbGoodsDescMapper;
 import com.whoiszxl.mapper.TbGoodsMapper;
 import com.whoiszxl.pojo.TbGoods;
 import com.whoiszxl.pojo.TbGoodsExample;
 import com.whoiszxl.pojo.TbGoodsExample.Criteria;
+import com.whoiszxl.pojogroup.Goods;
 import com.whoiszxl.sellergoods.service.GoodsService;
 
 import com.whoiszxl.entity.PageResult;
@@ -22,6 +24,9 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Autowired
 	private TbGoodsMapper goodsMapper;
+	
+	@Autowired
+	private TbGoodsDescMapper goodsDescMapper;
 	
 	/**
 	 * 查询全部
@@ -45,8 +50,11 @@ public class GoodsServiceImpl implements GoodsService {
 	 * 增加
 	 */
 	@Override
-	public void add(TbGoods goods) {
-		goodsMapper.insert(goods);		
+	public void add(Goods goods) {
+		goods.getGoods().setAuditStatus("0");
+		goodsMapper.insert(goods.getGoods());
+		goods.getGoodsDesc().setGoodsId(goods.getGoods().getId());
+		goodsDescMapper.insert(goods.getGoodsDesc());
 	}
 
 	

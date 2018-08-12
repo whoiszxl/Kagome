@@ -1,6 +1,7 @@
 package com.whoiszxl.shop.controller;
 import java.util.List;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +9,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.whoiszxl.entity.PageResult;
 import com.whoiszxl.entity.Result;
 import com.whoiszxl.pojo.TbGoods;
+import com.whoiszxl.pojogroup.Goods;
 import com.whoiszxl.sellergoods.service.GoodsService;
 
 /**
@@ -47,7 +49,11 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbGoods goods){
+	public Result add(@RequestBody Goods goods){
+		//获取到登录名
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		//设置商家id
+		goods.getGoods().setSellerId(sellerId);
 		try {
 			goodsService.add(goods);
 			return new Result(true, "增加成功");

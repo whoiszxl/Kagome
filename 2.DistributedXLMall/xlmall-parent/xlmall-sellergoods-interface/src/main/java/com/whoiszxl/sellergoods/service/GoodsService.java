@@ -1,7 +1,7 @@
 package com.whoiszxl.sellergoods.service;
 import java.util.List;
 import com.whoiszxl.pojo.TbGoods;
-
+import com.whoiszxl.pojogroup.Goods;
 import com.whoiszxl.entity.PageResult;
 /**
  * 服务层接口
@@ -27,7 +27,7 @@ public interface GoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbGoods goods);
+	public void add(Goods goods);
 	
 	
 	/**
