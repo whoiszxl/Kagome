@@ -134,7 +134,9 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public void delete(Long[] ids) {
 		for (Long id : ids) {
-			goodsMapper.deleteByPrimaryKey(id);
+			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
+			goods.setIsDelete("1");
+			goodsMapper.updateByPrimaryKey(goods);
 		}
 	}
 
@@ -171,7 +173,7 @@ public class GoodsServiceImpl implements GoodsService {
 			if (goods.getIsDelete() != null && goods.getIsDelete().length() > 0) {
 				criteria.andIsDeleteLike("%" + goods.getIsDelete() + "%");
 			}
-
+			criteria.andIsDeleteIsNull();//非删除状态
 		}
 
 		Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
