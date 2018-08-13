@@ -136,6 +136,8 @@ public class ContentServiceImpl implements ContentService {
 			criteria2.andStatusEqualTo("1");// 开启状态
 			contentExample.setOrderByClause("sort_order");// 排序
 			contentList = contentMapper.selectByExample(contentExample);
+			
+			redisTemplate.boundHashOps("content").put(categoryId, contentList);//存入缓存 
 		} else {
 			System.out.println("redis banner from redis.");
 		}
