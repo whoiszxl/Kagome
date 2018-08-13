@@ -281,5 +281,7 @@
 		<module>xlmall-sellergoods-service</module>
 		<module>xlmall-manager-web</module>
 		<module>xlmall-shop-web</module>
+		<module>xlmall-content-interface</module>
+		<module>xlmall-content-service</module>
 	</modules>
 </project>
