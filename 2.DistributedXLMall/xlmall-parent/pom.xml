@@ -283,5 +283,6 @@
 		<module>xlmall-shop-web</module>
 		<module>xlmall-content-interface</module>
 		<module>xlmall-content-service</module>
+		<module>xlmall-portal-web</module>
 	</modules>
 </project>
