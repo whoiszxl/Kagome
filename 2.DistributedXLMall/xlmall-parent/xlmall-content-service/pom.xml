@@ -91,6 +91,11 @@
 			<artifactId>xlmall-content-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.whoiszxl</groupId>
+			<artifactId>xlmall-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
