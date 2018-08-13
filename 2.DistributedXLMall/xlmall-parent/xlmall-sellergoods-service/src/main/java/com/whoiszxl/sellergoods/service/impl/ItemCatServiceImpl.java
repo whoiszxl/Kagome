@@ -22,7 +22,7 @@ import com.whoiszxl.entity.PageResult;
  * @author Administrator
  *
  */
-@Service
+@Service(timeout = 10000)
 @Transactional
 public class ItemCatServiceImpl implements ItemCatService {
 
@@ -110,14 +110,17 @@ public class ItemCatServiceImpl implements ItemCatService {
 		TbItemCatExample example = new TbItemCatExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andParentIdEqualTo(parentId);
+		return itemCatMapper.selectByExample(example);
+	}
 
+	@Override
+	public void updateCateRedis() {
 		// 每次执行查询的时候，一次性读取缓存进行存储 (因为每次增删改都要执行此方法)
 		List<TbItemCat> list = findAll();
 		for (TbItemCat itemCat : list) {
 			redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
 		}
 		System.out.println("更新缓存:商品分类表");
-		return itemCatMapper.selectByExample(example);
 	}
 
 }

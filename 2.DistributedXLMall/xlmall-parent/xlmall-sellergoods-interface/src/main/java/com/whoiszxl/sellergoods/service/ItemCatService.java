@@ -65,4 +65,10 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public List<TbItemCat> findByParentId(Long parentId);
+
+	
+	/**
+	 * 更新分类的缓存到redis中
+	 */
+	void updateCateRedis();
 }
