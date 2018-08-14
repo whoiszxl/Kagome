@@ -1,5 +1,6 @@
 package com.whoiszxl.sellergoods.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +177,7 @@ public class GoodsServiceImpl implements GoodsService {
 			if (goods.getIsDelete() != null && goods.getIsDelete().length() > 0) {
 				criteria.andIsDeleteLike("%" + goods.getIsDelete() + "%");
 			}
-			criteria.andIsDeleteIsNull();//非删除状态
+			criteria.andIsDeleteIsNull();// 非删除状态
 		}
 
 		Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
@@ -276,5 +277,15 @@ public class GoodsServiceImpl implements GoodsService {
 			goods.setAuditStatus(status);
 			goodsMapper.updateByPrimaryKey(goods);
 		}
+	}
+
+	@Override
+	public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status) {
+		TbItemExample example = new TbItemExample();
+		com.whoiszxl.pojo.TbItemExample.Criteria criteria = example.createCriteria();
+		//查询商品在goodsIds中的并且符合status的
+		criteria.andGoodsIdIn(Arrays.asList(goodsIds));
+		criteria.andStatusEqualTo(status);
+		return itemMapper.selectByExample(example);
 	}
 }

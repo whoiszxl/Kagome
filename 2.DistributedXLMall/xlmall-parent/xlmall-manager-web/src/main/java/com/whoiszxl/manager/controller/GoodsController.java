@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.whoiszxl.pojo.TbGoods;
+import com.whoiszxl.pojo.TbItem;
 import com.whoiszxl.pojogroup.Goods;
+import com.whoiszxl.search.service.ItemSearchService;
 import com.whoiszxl.sellergoods.service.GoodsService;
 
 import com.whoiszxl.entity.PageResult;
@@ -26,6 +28,9 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+
+	@Reference
+	private ItemSearchService itemSearchService;
 
 	/**
 	 * 返回全部列表
@@ -132,6 +137,16 @@ public class GoodsController {
 	public Result updateStatus(Long[] ids, String status) {
 		try {
 			goodsService.updateStatus(ids, status);
+			// 按照SPU ID查询 SKU列表(状态为1)
+			if (status.equals("1")) {// 审核通过
+				List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
+				// 调用搜索接口实现数据批量导入
+				if (itemList.size() > 0) {
+					itemSearchService.importList(itemList);
+				} else {
+					System.out.println("没有明细数据");
+				}
+			}
 			return new Result(true, "成功");
 		} catch (Exception e) {
 			e.printStackTrace();

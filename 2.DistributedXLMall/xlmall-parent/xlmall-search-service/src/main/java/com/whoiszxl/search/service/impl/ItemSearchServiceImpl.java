@@ -219,4 +219,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		}
 		return map;
 	}
+
+	@Override
+	public void importList(List list) {
+		solrTemplate.saveBeans(list);	
+		solrTemplate.commit();
+	}
 }
