@@ -18,4 +18,11 @@ public interface ItemSearchService {
 	 * @param list
 	 */
 	public void importList(List list);
+	
+	
+	/**
+	 * 删除数据
+	 * @param ids
+	 */
+	public void deleteByGoodsIds(List goodsIdList);
 }

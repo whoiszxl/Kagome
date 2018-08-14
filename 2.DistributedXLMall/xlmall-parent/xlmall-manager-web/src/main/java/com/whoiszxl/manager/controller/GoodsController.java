@@ -1,5 +1,6 @@
 package com.whoiszxl.manager.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -107,6 +108,8 @@ public class GoodsController {
 	public Result delete(Long[] ids) {
 		try {
 			goodsService.delete(ids);
+			//刪除solr中的商品
+			itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
 			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();
