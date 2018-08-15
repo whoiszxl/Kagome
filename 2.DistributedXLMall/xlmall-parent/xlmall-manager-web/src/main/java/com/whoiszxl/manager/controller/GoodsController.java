@@ -16,6 +16,7 @@ import com.whoiszxl.sellergoods.service.GoodsService;
 
 import com.whoiszxl.entity.PageResult;
 import com.whoiszxl.entity.Result;
+import com.whoiszxl.page.service.ItemPageService;
 
 /**
  * controller
@@ -32,6 +33,10 @@ public class GoodsController {
 
 	@Reference
 	private ItemSearchService itemSearchService;
+	
+	
+	@Reference(timeout=40000)
+	private ItemPageService itemPageService;
 
 	/**
 	 * 返回全部列表
@@ -157,4 +162,13 @@ public class GoodsController {
 		}
 	}
 
+	
+	/**
+	 * 生成静态页
+	 * @param goodsId
+	 */
+	@RequestMapping("/genHtml")
+	public void genHtml(Long goodsId){
+		itemPageService.genItemHtml(goodsId);	
+	}
 }

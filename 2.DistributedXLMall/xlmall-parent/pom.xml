@@ -288,5 +288,7 @@
 		<module>xlmall-search-interface</module>
 		<module>xlmall-search-service</module>
 		<module>xlmall-search-web</module>
+		<module>xlmall-page-interface</module>
+		<module>xlmall-page-service</module>
 	</modules>
 </project>
