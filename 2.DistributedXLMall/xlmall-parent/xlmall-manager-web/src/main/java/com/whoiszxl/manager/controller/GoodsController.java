@@ -148,11 +148,17 @@ public class GoodsController {
 			// 按照SPU ID查询 SKU列表(状态为1)
 			if (status.equals("1")) {// 审核通过
 				List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
+				
 				// 调用搜索接口实现数据批量导入
 				if (itemList.size() > 0) {
 					itemSearchService.importList(itemList);
 				} else {
 					System.out.println("没有明细数据");
+				}
+				
+				//生成freemarker静态页面
+				for(Long goodsId:ids){
+					itemPageService.genItemHtml(goodsId);
 				}
 			}
 			return new Result(true, "成功");

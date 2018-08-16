@@ -54,10 +54,10 @@ public class ItemPageServiceImpl implements ItemPageService {
 	public boolean genItemHtml(Long goodsId) {
 		
 		Configuration configuration = freeMarkerConfigurer.getConfiguration();
-		configuration.setDefaultEncoding("GBK");
+		configuration.setDefaultEncoding("UTF-8");
 		try {
 			Template template = configuration.getTemplate("item.ftl");
-			template.setEncoding("GBK");
+			template.setEncoding("UTF-8");
 			//创建数据模型
 			Map dataModel=new HashMap<>();
 			//1.商品主表数据

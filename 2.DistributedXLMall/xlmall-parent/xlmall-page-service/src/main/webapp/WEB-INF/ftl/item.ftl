@@ -31,7 +31,7 @@
     </script>
 </head>
 
-<body ng-app="pinyougou" ng-controller="itemController" ng-init="num=1;loadSku()">
+<body ng-app="xlmall" ng-controller="itemController" ng-init="num=1;loadSku()">
 
 <!--页面顶部 开始-->
 <#include "head.ftl">
