@@ -22,7 +22,6 @@ import com.whoiszxl.sellergoods.service.GoodsService;
 
 import com.whoiszxl.entity.PageResult;
 import com.whoiszxl.entity.Result;
-import com.whoiszxl.page.service.ItemPageService;
 
 /**
  * controller
@@ -37,17 +36,17 @@ public class GoodsController {
 	@Reference
 	private GoodsService goodsService;
 
-	@Reference(timeout = 40000)
-	private ItemPageService itemPageService;
-
 	@Autowired
 	private Destination queueSolrDestination;// 用于发送solr导入的消息
 
 	@Autowired
-	private Destination queueSolrDeleteDestination;//用户在索引库中删除记录
-	
+	private Destination queueSolrDeleteDestination;// 用户在索引库中删除记录
+
 	@Autowired
 	private JmsTemplate jmsTemplate;
+	
+	@Autowired
+	private Destination topicPageDestination;//用于生成商品详细页的消息目标(发布订阅)
 
 	/**
 	 * 返回全部列表
@@ -125,9 +124,9 @@ public class GoodsController {
 		try {
 			goodsService.delete(ids);
 			// 刪除solr中的商品
-			jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {		
+			jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {
 				@Override
-				public Message createMessage(Session session) throws JMSException {	
+				public Message createMessage(Session session) throws JMSException {
 					return session.createObjectMessage(ids);
 				}
 			});
@@ -168,9 +167,9 @@ public class GoodsController {
 
 				// 调用搜索接口实现数据批量导入
 				if (itemList.size() > 0) {
-					//將需要導入solr的list轉成json
+					// 將需要導入solr的list轉成json
 					final String jsonString = JSON.toJSONString(itemList);
-					//通過jms發送到solr隊列中去
+					// 通過jms發送到solr隊列中去
 					jmsTemplate.send(queueSolrDestination, new MessageCreator() {
 						@Override
 						public Message createMessage(Session session) throws JMSException {
@@ -182,8 +181,13 @@ public class GoodsController {
 				}
 
 				// 生成freemarker静态页面
-				for (Long goodsId : ids) {
-					itemPageService.genItemHtml(goodsId);
+				for (final Long goodsId : ids) {
+					jmsTemplate.send(topicPageDestination, new MessageCreator() {
+						@Override
+						public Message createMessage(Session session) throws JMSException {
+							return session.createTextMessage(goodsId + "");
+						}
+					});
 				}
 			}
 			return new Result(true, "成功");
@@ -193,13 +197,4 @@ public class GoodsController {
 		}
 	}
 
-	/**
-	 * 生成静态页
-	 * 
-	 * @param goodsId
-	 */
-	@RequestMapping("/genHtml")
-	public void genHtml(Long goodsId) {
-		itemPageService.genItemHtml(goodsId);
-	}
 }
