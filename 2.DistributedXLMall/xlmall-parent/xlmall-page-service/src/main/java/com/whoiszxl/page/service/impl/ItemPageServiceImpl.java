@@ -1,8 +1,6 @@
 package com.whoiszxl.page.service.impl;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -11,9 +9,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.whoiszxl.mapper.TbGoodsDescMapper;
 import com.whoiszxl.mapper.TbGoodsMapper;
 import com.whoiszxl.mapper.TbItemCatMapper;
