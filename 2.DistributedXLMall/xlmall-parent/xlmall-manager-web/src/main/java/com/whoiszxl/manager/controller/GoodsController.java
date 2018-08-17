@@ -44,9 +44,12 @@ public class GoodsController {
 
 	@Autowired
 	private JmsTemplate jmsTemplate;
-	
+
 	@Autowired
-	private Destination topicPageDestination;//用于生成商品详细页的消息目标(发布订阅)
+	private Destination topicPageDestination;// 用于生成商品详细页的消息目标(发布订阅)
+
+	@Autowired
+	private Destination topicPageDeleteDestination;// 用于删除静态网页的消息
 
 	/**
 	 * 返回全部列表
@@ -125,6 +128,13 @@ public class GoodsController {
 			goodsService.delete(ids);
 			// 刪除solr中的商品
 			jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {
+				@Override
+				public Message createMessage(Session session) throws JMSException {
+					return session.createObjectMessage(ids);
+				}
+			});
+
+			jmsTemplate.send(topicPageDeleteDestination, new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					return session.createObjectMessage(ids);
