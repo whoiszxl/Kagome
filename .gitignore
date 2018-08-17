@@ -42,3 +42,4 @@ target
 secret.properties
 
 2.DistributedXLMall/xlmall-parent/xlmall-shop-web/src/main/webapp/plugins
+2.DistributedXLMall/xlmall-sms/src/main/resources/application.properties
