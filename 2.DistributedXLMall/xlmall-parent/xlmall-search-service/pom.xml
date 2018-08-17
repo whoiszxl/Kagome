@@ -1,13 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.whoiszxl</groupId>
-    <artifactId>xlmall-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>xlmall-search-service</artifactId>
-  <packaging>war</packaging>
-  <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.whoiszxl</groupId>
+		<artifactId>xlmall-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>xlmall-search-service</artifactId>
+	<packaging>war</packaging>
+	<dependencies>
 
 		<!-- Spring -->
 		<dependency>
@@ -78,6 +79,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>5.13.4</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.whoiszxl</groupId>
 			<artifactId>xlmall-search-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -87,7 +94,7 @@
 			<artifactId>xlmall-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-  </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>

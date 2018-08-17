@@ -75,6 +75,12 @@
 		<artifactId>servlet-api</artifactId>		
 		<scope>provided</scope>
 	</dependency>
+	
+	<dependency>
+		<groupId>org.apache.activemq</groupId>
+		<artifactId>activemq-client</artifactId>
+		<version>5.13.4</version>
+	 </dependency>
 
 	<dependency>
 		<groupId>org.springframework.security</groupId>
@@ -94,11 +100,6 @@
 	<dependency>
 		<groupId>com.whoiszxl</groupId>
 		<artifactId>xlmall-content-interface</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-		<groupId>com.whoiszxl</groupId>
-		<artifactId>xlmall-search-interface</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 	<dependency>

@@ -24,9 +24,6 @@ app.controller('goodsController', function($scope, $controller, $location,
 	// 查询实体
 	$scope.findOne = function(id) {
 		var id = $location.search()['id'];// 获取参数值
-		if (id == null) {
-			return;
-		}
 		goodsService.findOne(id).success(function(response) {
 			$scope.entity = response;
 			//向富文本编辑器添加商品介绍
@@ -45,21 +42,27 @@ app.controller('goodsController', function($scope, $controller, $location,
 		});
 	}
 
-	// 保存
-	$scope.save = function() {
-		var serviceObject;// 服务层对象
-		if ($scope.entity.id != null) {// 如果有ID
-			serviceObject = goodsService.update($scope.entity); // 修改
-		} else {
-			serviceObject = goodsService.add($scope.entity);// 增加
-		}
-		serviceObject.success(function(response) {
-			if (response.success) {
-				location.href="goods.html";//跳转到商品列表页
-			} else {
-				alert(response.message);
-			}
-		});
+	//保存 
+	$scope.save=function(){	
+		// 再添加之前，获得富文本编辑器中的内容。
+		$scope.entity.goodsDesc.introduction=editor.html();
+		var serviceObject;//服务层对象  				
+		if($scope.entity.goods.id!=null){//如果有ID
+			serviceObject=goodsService.update( $scope.entity ); //修改  
+		}else{
+			serviceObject=goodsService.add( $scope.entity  );//增加 
+		}				
+		serviceObject.success(
+			function(response){
+				if(response.flag){
+					//重新查询 
+		        	alert(response.message);
+		        	location.href="goods.html";
+				}else{
+					alert(response.message);
+				}
+			}		
+		);				
 	}
 
 	// 批量删除
