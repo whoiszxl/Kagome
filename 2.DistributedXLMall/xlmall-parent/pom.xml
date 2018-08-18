@@ -290,5 +290,8 @@
 		<module>xlmall-search-web</module>
 		<module>xlmall-page-interface</module>
 		<module>xlmall-page-service</module>
+		<module>xlmall-user-interface</module>
+		<module>xlmall-user-service</module>
+		<module>xlmall-user-web</module>
 	</modules>
 </project>
