@@ -5,3 +5,7 @@
 .title-color {
 	color: white;
 }
+
+.mui-bar-tab .mui-tab-item.mui-active {
+	color: #c9394a;
+}
