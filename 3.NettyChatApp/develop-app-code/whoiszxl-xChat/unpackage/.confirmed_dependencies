@@ -1,0 +1,13 @@
+{
+  "index.html": {
+    "resources": [
+      "xl-chatlist.html"
+    ],
+    "refer": [
+      "xl-me.html",
+      "xl-contact.html",
+      "xl-discover.html",
+      "xl-chatlist.html"
+    ]
+  }
+}

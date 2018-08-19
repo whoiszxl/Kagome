@@ -26,22 +26,81 @@
 	
 	
 	<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item mui-active">
+	    <a class="mui-tab-item mui-active" tabindex="0">
 	        <span class="mui-icon iconfont icon-fire"></span>
 	        <span class="mui-tab-label">X信</span>
 	    </a>
-	    <a class="mui-tab-item">
+	    <a class="mui-tab-item" tabindex="1">
 	        <span class="mui-icon iconfont icon-tongxunlu"></span>
 	        <span class="mui-tab-label">通信录</span>
 	    </a>
-	    <a class="mui-tab-item">
+	    <a class="mui-tab-item" tabindex="2">
 	        <span class="mui-icon iconfont icon-zhinanzhen"></span>
 	        <span class="mui-tab-label">发现</span>
 	    </a>
-	    <a class="mui-tab-item">
+	    <a class="mui-tab-item" tabindex="3">
 	        <span class="mui-icon iconfont icon-wode-active"></span>
 	        <span class="mui-tab-label">我</span>
 	    </a>
 	</nav>
+	
+	<script type="text/javascript">
+		
+		var xlChatArray = [
+			{
+				pageId: "xl-chatlist.html",
+				pageUrl: "xl-chatlist.html",
+			},
+			{
+				pageId: "xl-contact.html",
+				pageUrl: "xl-contact.html",
+			},
+			{
+				pageId: "xl-discover.html",
+				pageUrl: "xl-discover.html",
+			},
+			{
+				pageId: "xl-me.html",
+				pageUrl: "xl-me.html",
+			}
+		];
+		
+		var xlStyle = {
+			top: "44px",
+			bottom: "50px"
+		};
+		mui.plusReady(function() {
+			//获取当前的webview对象
+			var indexWebview = plus.webview.currentWebview();
+			
+			//向当前的主页webview追加子页的四张webview对象
+			for (var i=0; i < xlChatArray.length; i++) {
+				var xPage = plus.webview.create(xlChatArray[i].pageUrl, 
+					xlChatArray[i].pageId,
+				xlStyle);
+				//隐藏webview窗口
+				xPage.hide();
+				
+				//追加每一个子页面到当前主页面
+				indexWebview.append(xPage);
+			}
+			
+			plus.webview.show(xlChatArray[0].pageId);
+			
+			
+			//批量绑定tab事件，展示不同的页面
+			mui(".mui-bar-tab").on("tap", "a", function() {
+				var tabindex = this.getAttribute("tabindex");
+				//显示点击的tab对应的页面
+				plus.webview.show(xlChatArray[tabindex].pageId, "fade-in", 200);
+				//隐藏不需要的tab页面
+				for (var i=0; i < xlChatArray.length; i++) {
+					if(i != tabindex) {
+						plus.webview.hide(xlChatArray[i].pageId, "fade-out", 200);
+					}
+				}
+			});
+		});
+	</script>
 </body>
 </html>
