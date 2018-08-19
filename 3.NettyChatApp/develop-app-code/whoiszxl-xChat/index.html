@@ -8,7 +8,14 @@
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link href="css/header.css" rel="stylesheet" />
     <script type="text/javascript" charset="utf-8">
+      	//初始化
       	mui.init();
+      	
+      	//设备加载完毕后
+      	mui.plusReady(function() {
+      		plus.navigator.setStatusBarStyle("light");
+      		plus.navigator.setStatusBarBackground("#c9394a");
+      	});
     </script>
 </head>
 <body>
