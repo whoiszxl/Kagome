@@ -1,12 +1,13 @@
 package com.whoiszxl;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-// É¨Ãè ËùÓĞĞèÒªµÄ°ü, °üº¬Ò»Ğ©×ÔÓÃµÄ¹¤¾ßÀà°ü ËùÔÚµÄÂ·¾¶
-@ComponentScan(basePackages= {"com.whoiszxl"})
+@MapperScan(basePackages= {"com.whoiszxl.mapper"})//æ‰«æmybatisåŒ…è·¯å¾„
+@ComponentScan(basePackages= {"com.whoiszxl"})//æ‰«ææ‰€æœ‰éœ€è¦çš„åŒ…ï¼ŒåŒ…å«ä¸€äº›å·¥å…·ç±»åŒ…æ‰€åœ¨çš„è·¯å¾„
 public class Application {
 	
 	public static void main(String[] args) {
