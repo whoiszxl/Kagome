@@ -6,4 +6,7 @@
   <packaging>pom</packaging>
   <name>micro service project</name>
   <description>micro service project pom</description>
+  <modules>
+  	<module>message-thrift-service-api</module>
+  </modules>
 </project>
