@@ -1,6 +1,7 @@
 package com.whoiszxl.order.service.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
 		orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
 		orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
 		orderMaster.setOrderId(KeyUtil.genUniqueKey());
+		orderMaster.setCreateTime(new Date());
+		orderMaster.setUpdateTime(new Date());
 		orderMasterRepository.save(orderMaster);
 		return orderDTO;
 	}
