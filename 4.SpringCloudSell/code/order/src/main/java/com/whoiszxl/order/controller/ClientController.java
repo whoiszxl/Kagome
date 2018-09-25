@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.whoiszxl.order.client.ProductClient;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,6 +26,9 @@ public class ClientController {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	@Autowired
+	private ProductClient productClient;
+	
 	@GetMapping("/getProductMsg")
 	public String getProductMsg() {
 		//1.第一种方式（写死url）
@@ -40,6 +45,13 @@ public class ClientController {
 		//3.第三种方式（注入RestTemplate）
 		//String response = restTemplate.getForObject("http://PRODUCT/msg", String.class);
 		
+		log.info("response={}", response);
+		return response;
+	}
+	
+	@GetMapping("/getProductMsgByFeign")
+	public String getProductMsgByFeign() {
+		String response = productClient.productMsg();
 		log.info("response={}", response);
 		return response;
 	}
