@@ -8,11 +8,12 @@ import com.whoiszxl.seckill.validator.IsMobile;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @ToString
-@Builder
+@NoArgsConstructor
 public class LoginVo {
 	
 	@NotNull
