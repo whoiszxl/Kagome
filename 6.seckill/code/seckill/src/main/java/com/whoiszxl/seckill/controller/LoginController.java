@@ -36,6 +36,9 @@ public class LoginController {
 	public String toLogin() {
 		return "login";
 	}
+	
+	
+	
 
 	@RequestMapping("/do_login")
 	@ResponseBody
