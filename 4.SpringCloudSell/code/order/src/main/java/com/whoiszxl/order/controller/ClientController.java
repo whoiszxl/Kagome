@@ -1,5 +1,8 @@
 package com.whoiszxl.order.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.whoiszxl.order.client.ProductClient;
+import com.whoiszxl.order.dataobject.ProductInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,14 +40,14 @@ public class ClientController {
 //		String response = restTemplate.getForObject("http://localhost:8080/msg", String.class);
 		
 		//2.第二种方式（通过应用名）
-		ServiceInstance serviceInstance = loadBalancerClient.choose("PRODUCT");
-		String url = String.format("http://%s:%s", serviceInstance.getHost(), serviceInstance.getPort() + "/msg");
-		RestTemplate restTemplate = new RestTemplate();
-		String response = restTemplate.getForObject(url, String.class);
+//		ServiceInstance serviceInstance = loadBalancerClient.choose("PRODUCT");
+//		String url = String.format("http://%s:%s", serviceInstance.getHost(), serviceInstance.getPort() + "/msg");
+//		RestTemplate restTemplate = new RestTemplate();
+//		String response = restTemplate.getForObject(url, String.class);
 
 		
 		//3.第三种方式（注入RestTemplate）
-		//String response = restTemplate.getForObject("http://PRODUCT/msg", String.class);
+		String response = restTemplate.getForObject("http://PRODUCT/msg", String.class);
 		
 		log.info("response={}", response);
 		return response;
@@ -52,7 +56,12 @@ public class ClientController {
 	@GetMapping("/getProductMsgByFeign")
 	public String getProductMsgByFeign() {
 		String response = productClient.productMsg();
-		log.info("response={}", response);
+		log.info("feign请求：response={}", response);
 		return response;
+	}
+	
+	@GetMapping("/products")
+	public List<ProductInfo> getProductListByIds() {
+		return productClient.getProductListByIds(Arrays.asList("157875196366160022","157875227953464068"));
 	}
 }

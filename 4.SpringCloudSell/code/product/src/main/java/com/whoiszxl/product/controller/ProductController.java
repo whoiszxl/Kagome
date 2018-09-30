@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -73,4 +75,17 @@ public class ProductController {
 		return ResultVOUtil.success(productVOList);
 	}
 	
+	
+	/**
+	 * 获取商品列表(for orderService)
+	 * 
+	 * @tips 使用@RequestBody后，必须使用PostMapping，单参数才能用@GetMapping
+	 * 
+	 * @param productIdList 商品id list
+	 * @return 商品集合
+	 */
+	@PostMapping("/listForOrder")
+	public List<ProductInfo> listForOrder(@RequestBody List<String> productIdList) {
+		return productService.findListByProductIdIn(productIdList);
+	}
 }
