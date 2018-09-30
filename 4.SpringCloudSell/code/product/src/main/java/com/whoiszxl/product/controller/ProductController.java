@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.whoiszxl.product.dataobject.ProductCategory;
 import com.whoiszxl.product.dataobject.ProductInfo;
+import com.whoiszxl.product.dto.CartDTO;
 import com.whoiszxl.product.service.CategoryService;
 import com.whoiszxl.product.service.ProductService;
 import com.whoiszxl.product.utils.ResultVOUtil;
@@ -87,5 +88,18 @@ public class ProductController {
 	@PostMapping("/listForOrder")
 	public List<ProductInfo> listForOrder(@RequestBody List<String> productIdList) {
 		return productService.findListByProductIdIn(productIdList);
+	}
+	
+	
+	/**
+	 * 通过CartDTO传入商品数量和商品id进行库存扣减
+	 * @param cartDTOList
+	 * @return
+	 */
+	@PostMapping("/decreaseStock")
+	public ResultVO decreaseStock(@RequestBody List<CartDTO> cartDTOList) {
+		System.out.println("调用decreaseStockdecreaseStockdecreaseStock");
+		productService.decreaseStock(cartDTOList);
+		return ResultVOUtil.success("库存扣减成功");
 	}
 }

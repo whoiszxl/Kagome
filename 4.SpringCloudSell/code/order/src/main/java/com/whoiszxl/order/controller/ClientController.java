@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.whoiszxl.order.client.ProductClient;
 import com.whoiszxl.order.dataobject.ProductInfo;
+import com.whoiszxl.order.dto.CartDTO;
+import com.whoiszxl.order.vo.ResultVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,5 +65,11 @@ public class ClientController {
 	@GetMapping("/products")
 	public List<ProductInfo> getProductListByIds() {
 		return productClient.getProductListByIds(Arrays.asList("157875196366160022","157875227953464068"));
+	}
+	
+	@GetMapping("/decreaseProduct")
+	public ResultVO decrease() {
+		CartDTO cartDTO = new CartDTO("157875196366160022", 10);
+		return productClient.decreaseStock(Arrays.asList(cartDTO));
 	}
 }

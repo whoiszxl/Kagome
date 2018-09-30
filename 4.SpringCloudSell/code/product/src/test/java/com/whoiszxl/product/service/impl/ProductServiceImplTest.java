@@ -2,6 +2,7 @@ package com.whoiszxl.product.service.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.whoiszxl.product.dataobject.ProductInfo;
+import com.whoiszxl.product.dto.CartDTO;
 import com.whoiszxl.product.service.ProductService;
 
 @RunWith(SpringRunner.class)
@@ -26,6 +28,12 @@ public class ProductServiceImplTest {
 		for (ProductInfo productInfo : findUpAll) {
 			System.out.println(productInfo);
 		}
+	}
+	
+	@Test
+	public void testDecreaseStock() {
+		CartDTO cartDTO = new CartDTO("157875196366160022", 10);
+		productService.decreaseStock(Arrays.asList(cartDTO));
 	}
 
 }

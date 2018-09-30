@@ -33,5 +33,6 @@ public class ProductInfoRepositoryTest {
 			System.out.println(productInfo);
 		}
 	}
+	
 
 }
