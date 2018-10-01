@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: config
+    
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/whoiszxl/sell_config
+          username: whoiszxl@gmail.com
+          password: 111111
+          basedir: /config/java/sell
+          
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
