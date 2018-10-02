@@ -1,7 +1,6 @@
 spring:
   application:
     name: config
-    
   cloud:
     config:
       server:
@@ -10,8 +9,23 @@ spring:
           username: whoiszxl@gmail.com
           password: 111111
           basedir: /config/java/sell
-          
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+  rabbitmq:
+    host: whoiszxl.com
+    port: 5672
+    username: guest
+    password: guest
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+      
