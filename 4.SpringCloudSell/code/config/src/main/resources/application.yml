@@ -7,7 +7,7 @@ spring:
         git:
           uri: https://gitee.com/whoiszxl/sell_config
           username: whoiszxl@gmail.com
-          password: 111111
+          password: whoiszxl111
           basedir: /config/java/sell
     bus:
       enabled: true

@@ -3,6 +3,7 @@ package com.whoiszxl.product.common;
 import java.math.BigDecimal;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * 商品信息
@@ -10,6 +11,7 @@ import lombok.Data;
  *
  */
 @Data
+@ToString
 public class ProductInfoOutput {
 
    private String productId;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,16 @@ import com.whoiszxl.product.enums.ResultEnum;
 import com.whoiszxl.product.exception.ProductException;
 import com.whoiszxl.product.repository.ProductInfoRepository;
 import com.whoiszxl.product.service.ProductService;
+import com.whoiszxl.product.utils.JsonUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductInfoRepository productInfoRepository;
+	
+	@Autowired
+	private AmqpTemplate amqpTemplate;
 	
 	@Override
 	public List<ProductInfo> findUpAll() {
@@ -61,6 +66,9 @@ public class ProductServiceImpl implements ProductService {
 			//更新扣减后的库存
 			productInfo.setProductStock(result);
 			productInfoRepository.save(productInfo);
+			
+			//发送MQ消息扣减库存
+			amqpTemplate.convertAndSend("productInfo", JsonUtil.toJson(productInfo));
 		}
 	}
 
